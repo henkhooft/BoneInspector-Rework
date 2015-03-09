@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BoneInspector_Rework.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="nSegments" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">16</Value>
+    </Setting>
+    <Setting Name="angleSegments" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">16</Value>
+    </Setting>
+    <Setting Name="d_ax" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.15</Value>
+    </Setting>
+    <Setting Name="line_length" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
