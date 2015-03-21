@@ -20,11 +20,6 @@ namespace BoneInspector_Rework
         static MainView instance;
 
         // Globals
-        const double MINZOOM = 0.11;
-        FIBITMAP dib, dib_orig;
-        Bitmap image;
-        double zoomValue = 1, lastZoomValue = 1;
-        Graphics g;
         string lastSavedFileName = null;
 
         // Progress bools
@@ -33,46 +28,15 @@ namespace BoneInspector_Rework
         PointF draw_fish_first_point;
         bool draw_contour = false;
         bool draw_contour_first = false;
-        Contour currentContour;
 
-        // Lines drawn
-        List<DoublePoint> fishLines = new List<DoublePoint>();
-        List<Contour> contours = new List<Contour>();
+        
 
-        /* Nested class for holding 2 points which compose a line */
-        public class DoublePoint
-        {
-            PointF p1, p2;
-            public bool drawn = false; // there goes OO-programming
-
-            public DoublePoint(PointF p1, PointF p2)
-            {
-                this.p1 = p1;
-                this.p2 = p2;
-            }
-
-            public PointF getPoint(int index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        return p1;
-                    case 1:
-                        return p2;
-                    default:
-                        return new PointF();
-                }
-            }
-        }
 
         public MainView()
         {
             instance = this;
             InitializeComponent();
-            if (!FreeImage.IsAvailable())
-            {
-                MessageBox.Show("Could not find the FreeImage dll", "FreeImageDLL not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            
 
             // Disable all buttons while no image is loaded
             saveFileButton.Enabled = false;
@@ -96,10 +60,6 @@ namespace BoneInspector_Rework
             return instance;
         }
 
-        public List<Contour> getContours()
-        {
-            return contours;
-        }
 
         /* Show Aboutbox */
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -118,8 +78,7 @@ namespace BoneInspector_Rework
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                dib_orig = FreeImage.LoadEx(openFileDialog1.FileName);
-                dib = dib_orig;
+                
 
                 saveFileButton.Enabled = true;
                 fishlineButton.Enabled = true;
@@ -138,14 +97,9 @@ namespace BoneInspector_Rework
                 image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
                 g = Graphics.FromImage(image);
                 g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-
-                // Clear lists
-                contours.Clear();
-                fishLines.Clear();
             }
             else return;
 
-            refreshImage();
         }
 
         /* Exit the application */
@@ -157,57 +111,14 @@ namespace BoneInspector_Rework
         /* Flip the image horizontally */
         private void flipHorizontallyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!dib.IsNull)
-            {
-                FreeImage.FlipHorizontal(dib_orig);
-                dib = dib_orig;
-                refreshImage();
-            }
+
         }
 
-        /* Refreshes the image if changed */
-        public void refreshImage()
-        {
-            if (!dib.IsNull)
-            {
-                
-                // Zoom changed, adjusting all point values
-                if (zoomValue != lastZoomValue)
-                {
-                    int x = (int)((double)FreeImage.GetWidth(dib_orig) * zoomValue);
-                    int y = (int)((double)FreeImage.GetHeight(dib_orig) * zoomValue);
-                    dib = FreeImage.Rescale(dib_orig, x, y, FREE_IMAGE_FILTER.FILTER_BILINEAR);
-                    lastZoomValue = zoomValue;
-                }
-
-                image.Dispose();
-                image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-                g = Graphics.FromImage(image);
-                g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-
-                // Draw any overlay that is necessary
-                drawLines();
-                drawStrings();
-
-                pictureBox1.Image = image;
-                panel1.Focus();
-
-            }
-            else
-            {
-                MessageBox.Show("Could not load image", "Error reading in image", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         /* Flip the image vertically */
         private void flipVerticallyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!dib.IsNull)
-            {
-                FreeImage.FlipVertical(dib);
-                dib = dib_orig;
-                refreshImage();
-            }
+            
         }
 
         /* Open file shortcut */
@@ -330,224 +241,7 @@ namespace BoneInspector_Rework
             }
         }
 
-        /* Returns the absolute distance between two points */
-        private static double getDistance(PointF p1, PointF p2)
-        {
-            double dx = p1.X - p2.X;
-            double dy = p1.Y - p2.Y;
-            return Math.Sqrt(dx * dx + dy * dy);
-        }
-
-        private static PointF getPartOfLine(PointF p1, PointF p2, double d_ax)
-        {
-            double dx = p2.X - p1.X;
-            double dy = p2.Y - p1.Y;
-            double x_point = dx * d_ax + p1.X;
-            double y_point = dy * d_ax + p1.Y;
-
-            return new PointF((float)x_point, (float)y_point);
-        }
-
-        /* Finds the intersection point for line (p1 p2) and line (p3 p4) */
-        private static PointF getIntersection(PointF p1, PointF p2, PointF p3, PointF p4)
-        {
-            double A1 = p2.Y - p1.Y;
-            double B1 = p1.X - p2.X;
-            double C1 = A1 * p1.X + B1 * p1.Y;
-
-            double A2 = p4.Y - p3.Y;
-            double B2 = p3.X - p4.X;
-            double C2 = A2 * p3.X + B2 * p3.Y;
-
-            double det = A1 * B2 - A2 * B1;
-            if (det == 0)
-            {
-                // MessageBox.Show("Lines are parallel!");
-                return new PointF();
-            }
-            else
-            {
-                double x = (B2 * C1 - B1 * C2) / det;
-                double y = (A1 * C2 - A2 * C1) / det;
-
-                if (Math.Min(p3.X, p4.X) < x && x < Math.Max(p3.X, p4.X) && Math.Min(p1.X, p2.X) < x && x < Math.Max(p1.X, p2.X))
-                {
-                    return new PointF((float)x, (float)y);
-                }
-                return new PointF();
-            }
-        }
-
-        /* Returns the real point coordinates with relation to the zoom level in use */
-        private PointF getRealP(PointF p)
-        {
-            return new PointF((float)(p.X * zoomValue), (float)(p.Y * zoomValue));
-        }
-
-        /* Calculates the real point coordinates back from the zoom level */
-        private PointF getRealPInvert(PointF p)
-        {
-            return new PointF((float)(p.X / zoomValue), (float)(p.Y / zoomValue));
-        }
-
-        private void drawFishLine(PointF p1, PointF p2)
-        {
-            // Empty the existing fishline list
-            fishLines.Clear();
-
-            // Parameter setup
-            int n_segments = Properties.Settings.Default.nSegments;
-            int n_angle_segments = Properties.Settings.Default.angleSegments;
-            double d_ax = Properties.Settings.Default.d_ax;
-            double line_length = Properties.Settings.Default.line_length;
-
-            // Construct distaal and proximaal points
-            PointF p_dist = getPartOfLine(p1, p2, d_ax);
-            PointF p_prox = getPartOfLine(p1, p2, (1 - d_ax));
-            fishLines.Add(new DoublePoint(getRealPInvert(p_dist), getRealPInvert(p_prox)));
-
-            double d_length = getDistance(p1, p2);
-            double d_spacing = 1.0 / n_segments;
-            double d_radius = d_length * line_length;
-            double dx = p1.X - p2.X;
-            double dy = p2.Y - p1.Y;
-            
-            // Right half
-            for (int i = 0; i <= n_segments; i++)
-            {
-                PointF p = getPartOfLine(p_dist, p_prox, d_spacing * i);
-                double alpha = Math.Atan(dx / dy);
-
-                double p_left_x = p.X - (Math.Cos(alpha) * d_radius);
-                double p_left_y = p.Y - (Math.Sin(alpha) * d_radius);
-                double p_right_x = p.X + (Math.Cos(alpha) * d_radius);
-                double p_right_y = p.Y + (Math.Sin(alpha) * d_radius);
-                PointF p_right = new PointF((float)p_right_x, (float)p_right_y);
-
-                // All this calculation...
-                fishLines.Add(new DoublePoint(getRealPInvert(p), getRealPInvert(p_right)));
-            }
-
-            double p_offset = Math.Atan(dx / dy) * (180.0 / Math.PI);
-
-            // Bottom half
-            for (int i = n_angle_segments-1; i > 0; i--)
-            {
-                double theta = ((180.0 / n_angle_segments) * i) - p_offset + 180;
-                double x = p_prox.X + d_radius * Math.Cos(theta * (Math.PI / 180.0));
-                double y = p_prox.Y - d_radius * Math.Sin(theta * (Math.PI / 180.0));
-
-                PointF p_arc = new PointF((float)x, (float)y);
-                fishLines.Add(new DoublePoint(getRealPInvert(p_prox), getRealPInvert(p_arc)));
-            }
-
-            // Left half
-            for (int i = n_segments; i > 0; i--)
-            {
-                PointF p = getPartOfLine(p_dist, p_prox, d_spacing * i);
-                double alpha = Math.Atan(dx / dy);
-
-                double p_left_x = p.X - (Math.Cos(alpha) * d_radius);
-                double p_left_y = p.Y - (Math.Sin(alpha) * d_radius);
-                double p_right_x = p.X + (Math.Cos(alpha) * d_radius);
-                double p_right_y = p.Y + (Math.Sin(alpha) * d_radius);
-                PointF p_left = new PointF((float)p_left_x, (float)p_left_y);
-
-                // All this calculation...
-                fishLines.Add(new DoublePoint(getRealPInvert(p), getRealPInvert(p_left)));
-            }
-
-            // Draw the top half
-            for (int i = n_angle_segments; i > 0; i--)
-            {
-                double theta = ((180.0 / n_angle_segments) * i) - p_offset;
-                double x = p_dist.X + d_radius * Math.Cos(theta * (Math.PI / 180.0));
-                double y = p_dist.Y - d_radius * Math.Sin(theta * (Math.PI / 180.0));
-
-                PointF p_arc = new PointF((float)x, (float)y);
-                fishLines.Add(new DoublePoint(getRealPInvert(p_dist), getRealPInvert(p_arc)));
-            }
-        }
-
-        private void drawLines()
-        {
-            Pen mypen = new Pen(Color.Gray, 1.0F);
-            Pen drawnPen = new Pen(Color.DeepSkyBlue, 1.0F);
-
-            // Draw fishlines if they exist
-            foreach (DoublePoint line in fishLines)
-            {
-                if (!line.drawn)
-                {
-                    g.DrawLine(mypen, getRealP(line.getPoint(0)), getRealP(line.getPoint(1)));
-                }
-                else
-                {
-                    g.DrawLine(drawnPen, getRealP(line.getPoint(0)), getRealP(line.getPoint(1)));
-                }
-            }
-
-            // Draw Contourlines if they exist
-            mypen = new Pen(Color.Red, 1.0F);
-            float radius = 5;
-            foreach (Contour c in contours)
-            {
-                PointF p_old = c.getPoints()[0];
-                if (!c.getDone())
-                {
-                    DoublePoint lastDrawn = null;
-
-                    foreach (PointF p in c.getPoints())
-                    {
-                        g.DrawLine(mypen, getRealP(p_old), getRealP(p));
-
-                        // Draw intersection point
-                        if (fishLines.Count > 0)
-                        {
-                            foreach (DoublePoint line in fishLines)
-                            {
-                                PointF intersection = getRealP(getIntersection(p_old, p, line.getPoint(0), line.getPoint(1)));
-                                if (intersection.X != 0)
-                                {
-                                    g.DrawEllipse(mypen, intersection.X - radius / 2, intersection.Y - radius / 2, radius, radius);
-                                    currentContour.addMatchedPoint(new PointF(intersection.X - radius / 2, intersection.Y - radius / 2));
-                                    line.drawn = true;
-                                    lastDrawn = line;
-                                }
-                            }
-                        }
-                        p_old = p;
-                    }
-                    if (lastDrawn != null)
-                        g.DrawLine(Pens.Yellow, getRealP(lastDrawn.getPoint(0)), getRealP(lastDrawn.getPoint(1)));
-
-                    int finished = 0;
-                    foreach (DoublePoint line in fishLines)
-                    {
-                        if (line.drawn)
-                            finished++;
-                    }
-                    if (finished >= fishLines.Count - 1 && draw_contour)
-                    {
-                        this.Cursor = Cursors.Default;
-                        processContour();
-                    }
-                }
-                else // Draw the already added contours
-                {
-                    foreach (PointF p in c.getPoints())
-                    {
-                        g.DrawLine(mypen, getRealP(p_old), getRealP(p));
-                        p_old = p;
-                    }
-                    foreach (PointF p in c.getMatchedPoints())
-                    {
-                        PointF p_real = getRealP(p);
-                        g.DrawEllipse(mypen, p_real.X, p_real.Y, radius, radius);
-                    }
-                }
-            }
-        }
+        
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -612,72 +306,11 @@ namespace BoneInspector_Rework
             }
         }
 
-        private void drawStrings()
-        {
-            foreach (Contour c in contours)
-            {
-                if (c.getDone())
-                {
-                    // Create font and brush.
-                    Font drawFont = new Font("Arial", 16);
-                    SolidBrush drawBrush = new SolidBrush(Color.Yellow);
-                    g.DrawString(c.getName().ToString(), drawFont, drawBrush, getRealP(c.getLabel()) - new Size(40, -40));
-                }
-            }
+        
 
-           
-        }
+        
 
-        private void processContour()
-        {
-            // Contour is drawn, process it now
-            if (currentContour.getPoints().Count > 2)
-            {
-                SelectBone bone = new SelectBone();
-                var result = bone.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    currentContour.setName(bone.ReturnValue1);
-                    currentContour.setLabel(getRealPInvert(fishLines.Last().getPoint(1)));
-                    currentContour.setDone();
-                    drawStrings();
-                }
-                else
-                {
-                    currentContour.getPoints().Clear();
-                }
-
-                draw_contour = false;
-                draw_contour_first = false;
-                fishLines.Clear();
-                refreshImage();
-            }
-        }
-
-        private void writeContour(string filename)
-        {
-            System.IO.StreamWriter file = null;
-            try
-            {
-                System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Contour>));
-                file = new StreamWriter(@filename);
-                if (contours.Count > 0)
-                {
-                    writer.Serialize(file, contours);
-                }
-            }
-            catch (IOException)
-            {
-                MessageBox.Show("Could not write contour file", "Contour file not written", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                if (file != null)
-                {
-                    file.Close();
-                }
-            }
-        }
+        
 
         /* Save contour file */
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -710,31 +343,7 @@ namespace BoneInspector_Rework
 
         private void loadContourToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog2.Filter = "Contour Files (*.xml)|*.xml|All Files (*.*)|*.*";
-
-            if (openFileDialog2.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.StreamReader file = null;
-                try
-                {
-                    System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Contour>));
-                    file = new StreamReader(@openFileDialog2.FileName);
-
-                    contours = (List<Contour>)reader.Deserialize(file);
-                    refreshImage();
-                }
-                catch (IOException)
-                {
-                    MessageBox.Show("Could not read contour file", "Contour file failed to read", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    if (file != null)
-                    {
-                        file.Close();
-                    }
-                }
-            }
+            
         }
 
         private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -743,3 +352,10 @@ namespace BoneInspector_Rework
         }
     }
 }
+
+
+//////////////////////// ZOOI
+
+openFileDialog2.Filter = "Contour Files (*.xml)|*.xml|All Files (*.*)|*.*";
+
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)

@@ -88,6 +88,8 @@
   <ItemGroup>
     <Compile Include="contour\FeetContour.cs" />
     <Compile Include="contour\HandContour.cs" />
+    <Compile Include="handlers\DrawHandler.cs" />
+    <Compile Include="points\Line.cs" />
     <Compile Include="view\AboutBox1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,10 +97,9 @@
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
     <Compile Include="contour\BaseContour.cs" />
-    <Compile Include="handlers\PointCalculator.cs" />
+    <Compile Include="points\PointCalculator.cs" />
     <Compile Include="handlers\ContourHandler.cs" />
     <Compile Include="handlers\ImageHandler.cs" />
-    <Compile Include="contour\Contour.cs" />
     <Compile Include="view\ContourOptions.cs">
       <SubType>Form</SubType>
     </Compile>
