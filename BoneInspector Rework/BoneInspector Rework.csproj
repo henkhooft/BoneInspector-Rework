@@ -41,7 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,7 +56,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>BoneInspector.ico</ApplicationIcon>
+    <ApplicationIcon>ico\BoneInspector.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>D643AECB07C7D34D6267B0E3D91AF97708AA11E6</ManifestCertificateThumbprint>
@@ -86,58 +86,72 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox1.cs">
+    <Compile Include="contour\FeetContour.cs" />
+    <Compile Include="contour\HandContour.cs" />
+    <Compile Include="view\AboutBox1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutBox1.Designer.cs">
+    <Compile Include="view\AboutBox1.Designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Contour.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="contour\BaseContour.cs" />
+    <Compile Include="handlers\PointCalculator.cs" />
+    <Compile Include="handlers\ContourHandler.cs" />
+    <Compile Include="handlers\ImageHandler.cs" />
+    <Compile Include="contour\Contour.cs" />
+    <Compile Include="view\ContourOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\ContourOptions.Designer.cs">
+      <DependentUpon>ContourOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SelectBone.cs">
+    <Compile Include="view\SelectBone.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SelectBone.Designer.cs">
+    <Compile Include="view\SelectBone.Designer.cs">
       <DependentUpon>SelectBone.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainView.cs">
+    <Compile Include="view\MainView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainView.Designer.cs">
+    <Compile Include="view\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
-    <Compile Include="OptionsView.cs">
+    <Compile Include="view\OptionsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OptionsView.Designer.cs">
+    <Compile Include="view\OptionsView.Designer.cs">
       <DependentUpon>OptionsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ContourView.cs">
+    <Compile Include="view\ContourView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ContourView.Designer.cs">
+    <Compile Include="view\ContourView.Designer.cs">
       <DependentUpon>ContourView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AboutBox1.resx">
+    <EmbeddedResource Include="view\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SelectBone.resx">
+    <EmbeddedResource Include="view\ContourOptions.resx">
+      <DependentUpon>ContourOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\SelectBone.resx">
       <DependentUpon>SelectBone.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainView.resx">
+    <EmbeddedResource Include="view\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OptionsView.resx">
+    <EmbeddedResource Include="view\OptionsView.resx">
       <DependentUpon>OptionsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ContourView.resx">
+    <EmbeddedResource Include="view\ContourView.resx">
       <DependentUpon>ContourView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -160,11 +174,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BoneInspector.ico" />
-    <Content Include="FreeImage.dll">
+    <Content Include="ico\BoneInspector.ico" />
+    <Content Include="lib\FreeImage.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="FreeImageNET.dll">
+    <None Include="lib\FreeImageNET.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -207,9 +221,7 @@
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="lib\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

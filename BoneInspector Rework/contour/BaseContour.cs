@@ -7,33 +7,26 @@ using System.Threading.Tasks;
 
 namespace BoneInspector_Rework
 {
-    /* Class for holding contours */
-    public class Contour
+    abstract class BaseContour
     {
-        public enum Bones
-        {
-            MC1, MC2, MC3, MC4, MC5,
-            PP1, PP2, PP3, PP4, PP5,
-            MP1, MP2, MP3, MP4, MP5,
-            DP1, DP2, DP3, DP4, DP5
-        }
+        abstract enum Bones { }
 
-        public Bones name;
-        public List<PointF> points;
-        public List<PointF> matchedPoints;
-        public bool donedDrawing;
-        public PointF labelPosition;
+        private Bones name;
+        private List<PointF> drawnPoints;
+        private List<PointF> matchedPoints;
+        private bool doneDrawing;
+        private PointF labelPosition;
 
-        public Contour()
+        public BaseContour()
         {
-            points = new List<PointF>();
+            drawnPoints = new List<PointF>();
             matchedPoints = new List<PointF>();
-            donedDrawing = false;
+            doneDrawing = false;
         }
 
         public void addPoint(PointF p)
         {
-            points.Add(p);
+            drawnPoints.Add(p);
         }
 
         public void addMatchedPoint(PointF p)
@@ -51,24 +44,24 @@ namespace BoneInspector_Rework
             return name;
         }
 
-        public List<PointF> getPoints()
+        public List<PointF> getDrawnPoints()
         {
-            return points;
+            return drawnPoints;
         }
 
-        public List<PointF> getMatchedPoint()
+        public List<PointF> getMatchedPoints()
         {
             return matchedPoints;
         }
 
         public void setDone()
         {
-            donedDrawing = true;
+            doneDrawing = true;
         }
 
         public bool getDone()
         {
-            return donedDrawing;
+            return doneDrawing;
         }
 
         public PointF getLabel()

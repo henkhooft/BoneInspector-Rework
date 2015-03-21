@@ -75,17 +75,18 @@ namespace BoneInspector_Rework
             }
 
             // Disable all buttons while no image is loaded
-            toolStripButton2.Enabled = false;
-            toolStripButton3.Enabled = false;
-            toolStripButton4.Enabled = false;
-            toolStripButton5.Enabled = false;
-            toolStripButton6.Enabled = false;
-            toolStripButton7.Enabled = false;
-            toolStripButton8.Enabled = false;
-            toolStripButton9.Enabled = false;
+            saveFileButton.Enabled = false;
+            fishlineButton.Enabled = false;
+            zoomInButton.Enabled = false;
+            zoomOutButton.Enabled = false;
+            zoomWidthButton.Enabled = false;
+            contourButton.Enabled = false;
+            contourListButton.Enabled = false;
+            zoomOriginalButton.Enabled = false;
             openContourListToolStripMenuItem.Enabled = false;
             saveContourToolStripMenuItem.Enabled = false;
             loadContourToolStripMenuItem.Enabled = false;
+            boneTypeBox.Visible = false;
 
             openFileDialog1 = new OpenFileDialog();
         }
@@ -120,17 +121,19 @@ namespace BoneInspector_Rework
                 dib_orig = FreeImage.LoadEx(openFileDialog1.FileName);
                 dib = dib_orig;
 
-                toolStripButton2.Enabled = true;
-                toolStripButton3.Enabled = true;
-                toolStripButton4.Enabled = true;
-                toolStripButton5.Enabled = true;
-                toolStripButton6.Enabled = true;
-                toolStripButton7.Enabled = true;
-                toolStripButton8.Enabled = true;
-                toolStripButton9.Enabled = true;
+                saveFileButton.Enabled = true;
+                fishlineButton.Enabled = true;
+                zoomInButton.Enabled = true;
+                zoomOutButton.Enabled = true;
+                zoomWidthButton.Enabled = true;
+                contourButton.Enabled = true;
+                contourListButton.Enabled = true;
+                zoomOriginalButton.Enabled = true;
                 openContourListToolStripMenuItem.Enabled = true;
                 saveContourToolStripMenuItem.Enabled = true;
                 loadContourToolStripMenuItem.Enabled = true;
+                boneTypeBox.Visible = true;
+                boneTypeBox.SelectedIndex = 0;
 
                 image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
                 g = Graphics.FromImage(image);
@@ -163,7 +166,7 @@ namespace BoneInspector_Rework
         }
 
         /* Refreshes the image if changed */
-        private void refreshImage()
+        public void refreshImage()
         {
             if (!dib.IsNull)
             {
@@ -320,11 +323,8 @@ namespace BoneInspector_Rework
                 }
                 else
                 {
-                    currentContour = new Contour();
-                    contours.Add(currentContour);
                     currentContour.addPoint(getRealPInvert(curs));
                     draw_contour_first = true;
-                    
                 }
                 refreshImage();
             }
@@ -540,7 +540,7 @@ namespace BoneInspector_Rework
                         g.DrawLine(mypen, getRealP(p_old), getRealP(p));
                         p_old = p;
                     }
-                    foreach (PointF p in c.getMatchedPoint())
+                    foreach (PointF p in c.getMatchedPoints())
                     {
                         PointF p_real = getRealP(p);
                         g.DrawEllipse(mypen, p_real.X, p_real.Y, radius, radius);
@@ -557,22 +557,22 @@ namespace BoneInspector_Rework
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-        //    if (draw_fish)
-        //    {
-        //        if (draw_fish_first)
-        //        {
-        //            // Getting the cursers location
-        //            this.Cursor = new Cursor(Cursor.Current.Handle);
-        //            PointF curs = pictureBox1.PointToClient(Cursor.Position);
-        //            Bitmap newBitmap = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-        //            Debug.WriteLine("Orignal Bitmap Witdh: " + FreeImage.GetBitmap(dib).Width + " Height: " + FreeImage.GetBitmap(dib).Height);
-        //            Debug.WriteLine("Newbitmap Bitmap Witdh: " + newBitmap.Width + " Height: " + newBitmap.Height);
-        //            Graphics g = Graphics.FromImage(newBitmap);
-        //            g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-        //            Pen mypen = new Pen(Color.Gray, 1.0F);
-        //            g.DrawLine(mypen, draw_fish_first_point, curs);
-        //        }
-        //    }
+            if (draw_fish)
+            {
+                if (draw_fish_first)
+                {
+                    // Getting the cursers location
+                    this.Cursor = new Cursor(Cursor.Current.Handle);
+                    PointF curs = pictureBox1.PointToClient(Cursor.Position);
+
+                    Pen mypen = new Pen(Color.Red, 10.0F);
+                    // g.DrawLine(mypen, draw_fish_first_point, curs);
+                    // Create font and brush.
+                    Font drawFont = new Font("Arial", 16);
+                    SolidBrush drawBrush = new SolidBrush(Color.Yellow);
+                    g.DrawString("BLA", drawFont, drawBrush, curs);
+                }
+            }
         }
 
         private void openContourListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -598,6 +598,11 @@ namespace BoneInspector_Rework
             {
                 this.Cursor = Cursors.Cross;
                 draw_contour = true;
+                currentContour = new Contour();
+                contours.Add(currentContour);
+                ContourOptions contourPanel = new ContourOptions();
+                contourPanel.Location = new Point(panel1.Width - contourPanel.Width, panel1.Height / 2);
+                contourPanel.Show();
             }
             else
             {
@@ -730,6 +735,11 @@ namespace BoneInspector_Rework
                     }
                 }
             }
+        }
+
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            panel1.Focus();
         }
     }
 }

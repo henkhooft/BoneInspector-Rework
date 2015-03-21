@@ -40,29 +40,31 @@
             this.negativeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveContourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveContourAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadContourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openContourListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.openFileButton = new System.Windows.Forms.ToolStripButton();
+            this.saveFileButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
+            this.zoomInButton = new System.Windows.Forms.ToolStripButton();
+            this.zoomOutButton = new System.Windows.Forms.ToolStripButton();
+            this.zoomWidthButton = new System.Windows.Forms.ToolStripButton();
+            this.zoomOriginalButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
+            this.contourListButton = new System.Windows.Forms.ToolStripButton();
+            this.fishlineButton = new System.Windows.Forms.ToolStripButton();
+            this.contourButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.boneTypeBox = new System.Windows.Forms.ToolStripComboBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.saveContourAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -95,7 +97,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -103,7 +105,7 @@
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -156,6 +158,13 @@
             this.saveContourToolStripMenuItem.Text = "Save Contour";
             this.saveContourToolStripMenuItem.Click += new System.EventHandler(this.saveContourToolStripMenuItem_Click);
             // 
+            // saveContourAsToolStripMenuItem
+            // 
+            this.saveContourAsToolStripMenuItem.Name = "saveContourAsToolStripMenuItem";
+            this.saveContourAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveContourAsToolStripMenuItem.Text = "Save Contour As...";
+            this.saveContourAsToolStripMenuItem.Click += new System.EventHandler(this.saveContourAsToolStripMenuItem_Click);
+            // 
             // loadContourToolStripMenuItem
             // 
             this.loadContourToolStripMenuItem.Name = "loadContourToolStripMenuItem";
@@ -182,145 +191,163 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2,
+            this.openFileButton,
+            this.saveFileButton,
             this.toolStripSeparator1,
-            this.toolStripButton4,
-            this.toolStripButton5,
-            this.toolStripButton6,
-            this.toolStripButton9,
+            this.zoomInButton,
+            this.zoomOutButton,
+            this.zoomWidthButton,
+            this.zoomOriginalButton,
             this.toolStripSeparator2,
-            this.toolStripButton8,
-            this.toolStripButton3,
-            this.toolStripButton7});
+            this.contourListButton,
+            this.fishlineButton,
+            this.contourButton,
+            this.toolStripSeparator3,
+            this.boneTypeBox});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1424, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // openFileButton
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.ToolTipText = "Open a file";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.openFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openFileButton.Image = ((System.Drawing.Image)(resources.GetObject("openFileButton.Image")));
+            this.openFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openFileButton.Name = "openFileButton";
+            this.openFileButton.Size = new System.Drawing.Size(23, 22);
+            this.openFileButton.Text = "toolStripButton1";
+            this.openFileButton.ToolTipText = "Open a file";
+            this.openFileButton.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
-            // toolStripButton2
+            // saveFileButton
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
-            this.toolStripButton2.ToolTipText = "Save a contour file";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.saveFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveFileButton.Image = ((System.Drawing.Image)(resources.GetObject("saveFileButton.Image")));
+            this.saveFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveFileButton.Name = "saveFileButton";
+            this.saveFileButton.Size = new System.Drawing.Size(23, 22);
+            this.saveFileButton.Text = "toolStripButton2";
+            this.saveFileButton.ToolTipText = "Save a contour file";
+            this.saveFileButton.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton4
+            // zoomInButton
             // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton4.Text = "toolStripButton4";
-            this.toolStripButton4.ToolTipText = "Zoom in";
-            this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
+            this.zoomInButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomInButton.Image = ((System.Drawing.Image)(resources.GetObject("zoomInButton.Image")));
+            this.zoomInButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomInButton.Name = "zoomInButton";
+            this.zoomInButton.Size = new System.Drawing.Size(23, 22);
+            this.zoomInButton.Text = "toolStripButton4";
+            this.zoomInButton.ToolTipText = "Zoom in";
+            this.zoomInButton.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
-            // toolStripButton5
+            // zoomOutButton
             // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton5.Text = "toolStripButton5";
-            this.toolStripButton5.ToolTipText = "Zoom out";
-            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
+            this.zoomOutButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomOutButton.Image = ((System.Drawing.Image)(resources.GetObject("zoomOutButton.Image")));
+            this.zoomOutButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomOutButton.Name = "zoomOutButton";
+            this.zoomOutButton.Size = new System.Drawing.Size(23, 22);
+            this.zoomOutButton.Text = "toolStripButton5";
+            this.zoomOutButton.ToolTipText = "Zoom out";
+            this.zoomOutButton.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
-            // toolStripButton6
+            // zoomWidthButton
             // 
-            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
-            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton6.Text = "toolStripButton6";
-            this.toolStripButton6.ToolTipText = "Zoom to width";
-            this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
+            this.zoomWidthButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomWidthButton.Image = ((System.Drawing.Image)(resources.GetObject("zoomWidthButton.Image")));
+            this.zoomWidthButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomWidthButton.Name = "zoomWidthButton";
+            this.zoomWidthButton.Size = new System.Drawing.Size(23, 22);
+            this.zoomWidthButton.Text = "toolStripButton6";
+            this.zoomWidthButton.ToolTipText = "Zoom to width";
+            this.zoomWidthButton.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
-            // toolStripButton9
+            // zoomOriginalButton
             // 
-            this.toolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
-            this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton9.Name = "toolStripButton9";
-            this.toolStripButton9.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton9.Text = "toolStripButton9";
-            this.toolStripButton9.ToolTipText = "Zoom to original image size";
-            this.toolStripButton9.Click += new System.EventHandler(this.toolStripButton9_Click);
+            this.zoomOriginalButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomOriginalButton.Image = ((System.Drawing.Image)(resources.GetObject("zoomOriginalButton.Image")));
+            this.zoomOriginalButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomOriginalButton.Name = "zoomOriginalButton";
+            this.zoomOriginalButton.Size = new System.Drawing.Size(23, 22);
+            this.zoomOriginalButton.Text = "toolStripButton9";
+            this.zoomOriginalButton.ToolTipText = "Zoom to original image size";
+            this.zoomOriginalButton.Click += new System.EventHandler(this.toolStripButton9_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton8
+            // contourListButton
             // 
-            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
-            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton8.Text = "toolStripButton8";
-            this.toolStripButton8.ToolTipText = "Open contour list";
-            this.toolStripButton8.Click += new System.EventHandler(this.toolStripButton8_Click);
+            this.contourListButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.contourListButton.Image = ((System.Drawing.Image)(resources.GetObject("contourListButton.Image")));
+            this.contourListButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.contourListButton.Name = "contourListButton";
+            this.contourListButton.Size = new System.Drawing.Size(23, 22);
+            this.contourListButton.Text = "toolStripButton8";
+            this.contourListButton.ToolTipText = "Open contour list";
+            this.contourListButton.Click += new System.EventHandler(this.toolStripButton8_Click);
             // 
-            // toolStripButton3
+            // fishlineButton
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
-            this.toolStripButton3.ToolTipText = "Draw fishlines";
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            this.fishlineButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.fishlineButton.Image = ((System.Drawing.Image)(resources.GetObject("fishlineButton.Image")));
+            this.fishlineButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fishlineButton.Name = "fishlineButton";
+            this.fishlineButton.Size = new System.Drawing.Size(23, 22);
+            this.fishlineButton.Text = "toolStripButton3";
+            this.fishlineButton.ToolTipText = "Draw fishlines";
+            this.fishlineButton.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
-            // toolStripButton7
+            // contourButton
             // 
-            this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
-            this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton7.Text = "toolStripButton7";
-            this.toolStripButton7.ToolTipText = "Draw contour";
-            this.toolStripButton7.Click += new System.EventHandler(this.toolStripButton7_Click);
+            this.contourButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.contourButton.Image = ((System.Drawing.Image)(resources.GetObject("contourButton.Image")));
+            this.contourButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.contourButton.Name = "contourButton";
+            this.contourButton.Size = new System.Drawing.Size(23, 22);
+            this.contourButton.Text = "toolStripButton7";
+            this.contourButton.ToolTipText = "Draw contour";
+            this.contourButton.Click += new System.EventHandler(this.toolStripButton7_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // boneTypeBox
+            // 
+            this.boneTypeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.boneTypeBox.DropDownWidth = 75;
+            this.boneTypeBox.Items.AddRange(new object[] {
+            "Hands",
+            "Feet"});
+            this.boneTypeBox.Name = "boneTypeBox";
+            this.boneTypeBox.Size = new System.Drawing.Size(75, 25);
+            this.boneTypeBox.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
             // 
             // openFileDialog1
             // 
@@ -354,13 +381,6 @@
             // saveFileDialog1
             // 
             this.saveFileDialog1.Title = "Save a contour file";
-            // 
-            // saveContourAsToolStripMenuItem
-            // 
-            this.saveContourAsToolStripMenuItem.Name = "saveContourAsToolStripMenuItem";
-            this.saveContourAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveContourAsToolStripMenuItem.Text = "Save Contour As...";
-            this.saveContourAsToolStripMenuItem.Click += new System.EventHandler(this.saveContourAsToolStripMenuItem_Click);
             // 
             // MainView
             // 
@@ -403,25 +423,27 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton openFileButton;
+        private System.Windows.Forms.ToolStripButton saveFileButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripButton4;
-        private System.Windows.Forms.ToolStripButton toolStripButton5;
-        private System.Windows.Forms.ToolStripButton toolStripButton6;
+        private System.Windows.Forms.ToolStripButton zoomInButton;
+        private System.Windows.Forms.ToolStripButton zoomOutButton;
+        private System.Windows.Forms.ToolStripButton zoomWidthButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton toolStripButton8;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
-        private System.Windows.Forms.ToolStripButton toolStripButton7;
-        private System.Windows.Forms.ToolStripButton toolStripButton9;
+        private System.Windows.Forms.ToolStripButton contourListButton;
+        private System.Windows.Forms.ToolStripButton fishlineButton;
+        private System.Windows.Forms.ToolStripButton contourButton;
+        private System.Windows.Forms.ToolStripButton zoomOriginalButton;
         private System.Windows.Forms.ToolStripMenuItem negativeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem saveContourAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripComboBox boneTypeBox;
 
 
     }
