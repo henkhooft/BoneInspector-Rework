@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-using FreeImageAPI;
+using BoneInspector_Rework.handlers;
 
 namespace BoneInspector_Rework
 {
@@ -17,27 +17,32 @@ namespace BoneInspector_Rework
     public partial class MainView : Form
     {
         // Singleton instance
-        static MainView instance;
+        private static MainView instance;
+        private static ImageHandler imageHandler;
+        private static DrawHandler drawHandler;
+        private static ContourHandler contourHandler;
 
         // Globals
-        string lastSavedFileName = null;
+        private string lastSavedFileName = null;
 
         // Progress bools
-        bool draw_fish = false;
-        bool draw_fish_first = false;
-        PointF draw_fish_first_point;
-        bool draw_contour = false;
-        bool draw_contour_first = false;
+        private bool draw_fish = false;
+        private bool draw_fish_first = false;
+        private PointF draw_fish_first_point;
+        private bool draw_contour = false;
+        private bool draw_contour_first = false;
 
         
 
 
-        public MainView()
+        private MainView()
         {
             instance = this;
+            imageHandler = ImageHandler.Instance;
+            drawHandler = DrawHandler.Instance;
+            contourHandler = ContourHandler.Instance;
             InitializeComponent();
             
-
             // Disable all buttons while no image is loaded
             saveFileButton.Enabled = false;
             fishlineButton.Enabled = false;
@@ -55,9 +60,16 @@ namespace BoneInspector_Rework
             openFileDialog1 = new OpenFileDialog();
         }
 
-        public static MainView getInstance()
+        public static MainView Instance
         {
-            return instance;
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new MainView();
+                }
+                return instance;
+            }
         }
 
 
@@ -74,12 +86,8 @@ namespace BoneInspector_Rework
             openFileDialog1.Title = "Open a image file";
             openFileDialog1.Filter = "Image files | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.tif; |All files | *.*";
 
-            
-
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                
-
                 saveFileButton.Enabled = true;
                 fishlineButton.Enabled = true;
                 zoomInButton.Enabled = true;
@@ -94,9 +102,8 @@ namespace BoneInspector_Rework
                 boneTypeBox.Visible = true;
                 boneTypeBox.SelectedIndex = 0;
 
-                image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-                g = Graphics.FromImage(image);
-                g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
+                imageHandler.loadImage(openFileDialog1.FileName);
+                pictureBox1.Image = imageHandler.refreshImage();
             }
             else return;
 
@@ -111,14 +118,14 @@ namespace BoneInspector_Rework
         /* Flip the image horizontally */
         private void flipHorizontallyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            imageHandler.flipHorizontally();
         }
 
 
         /* Flip the image vertically */
         private void flipVerticallyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            imageHandler.flipVertically();
         }
 
         /* Open file shortcut */
@@ -130,54 +137,31 @@ namespace BoneInspector_Rework
         /* Zoom in button */
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            if (!dib.IsNull)
-            {
-                zoomValue += 0.1;
-                refreshImage();
-            }
+            imageHandler.rescale(imageHandler.getZoom() + 0.1);
         }
 
         /* Zoom out button */
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-            if (!dib.IsNull)
-            {
-                if (zoomValue >= MINZOOM)
-                    zoomValue -= 0.1;
-                refreshImage();
-            }
+            imageHandler.rescale(imageHandler.getZoom() - 0.1);
         }
 
         /* Zoom to fit panel width */
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-            if (!dib.IsNull)
-            {
-                zoomValue = (double)panel1.Width / (double)FreeImage.GetWidth(dib_orig);
-                refreshImage();
-            }
+            imageHandler.zoomToWidth(panel1.Width);
         }
 
         /* Zoom to original image size */
         private void toolStripButton9_Click(object sender, EventArgs e)
         {
-            if (!dib.IsNull)
-            {
-                lastZoomValue = 1; zoomValue = 1;
-                dib = dib_orig;
-                refreshImage();
-            }
+            imageHandler.rescale(1.0);
         }
 
         /* Invert the image */
         private void negativeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!dib.IsNull)
-            {
-                FreeImage.Invert(dib_orig);
-                dib = dib_orig;
-                refreshImage();
-            }
+            imageHandler.invert();
         }
 
         /* Enable drawing fish lines */
@@ -195,7 +179,7 @@ namespace BoneInspector_Rework
             }
         }
 
-        private void Form1_Click(object sender, EventArgs e)
+        private void PictureBox1_Click(object sender, EventArgs e)
         {
 
             // If drawing fish lines is enabled
@@ -209,11 +193,11 @@ namespace BoneInspector_Rework
                 if (draw_fish_first)
                 {
                     // Draw the fish line
-                    drawFishLine(draw_fish_first_point, curs);
+                    drawHandler.setFishLines(draw_fish_first_point, curs);
                     draw_fish_first = false;
                     draw_fish = false;
                     this.Cursor = Cursors.Default;
-                    refreshImage();
+                    imageHandler.refreshImage();
                 }
                 else
                 {
@@ -230,14 +214,15 @@ namespace BoneInspector_Rework
                 if (draw_contour_first)
                 {
                     // Draw contour line
-                    currentContour.addPoint(getRealPInvert(curs));
+                    contourHandler.getCurrent().addPoint(drawHandler.getRealPInvert(curs));
                 }
                 else
                 {
-                    currentContour.addPoint(getRealPInvert(curs));
+                    contourHandler.newContour(1);
+                    contourHandler.getCurrent().addPoint(drawHandler.getRealPInvert(curs));
                     draw_contour_first = true;
                 }
-                refreshImage();
+                imageHandler.refreshImage();
             }
         }
 
@@ -251,33 +236,23 @@ namespace BoneInspector_Rework
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (draw_fish)
-            {
-                if (draw_fish_first)
-                {
-                    // Getting the cursers location
-                    this.Cursor = new Cursor(Cursor.Current.Handle);
-                    PointF curs = pictureBox1.PointToClient(Cursor.Position);
-
-                    Pen mypen = new Pen(Color.Red, 10.0F);
-                    // g.DrawLine(mypen, draw_fish_first_point, curs);
-                    // Create font and brush.
-                    Font drawFont = new Font("Arial", 16);
-                    SolidBrush drawBrush = new SolidBrush(Color.Yellow);
-                    g.DrawString("BLA", drawFont, drawBrush, curs);
-                }
-            }
+            //if (draw_fish)
+            //{
+            //    if (draw_fish_first)
+            //    {
+            //        // Getting the cursers location
+            //        this.Cursor = new Cursor(Cursor.Current.Handle);
+            //        PointF curs = pictureBox1.PointToClient(Cursor.Position);
+            //        g.DrawString("BLA", drawFont, drawBrush, curs);
+            //    }
+            //}
         }
 
         private void openContourListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ContourView contourlist = new ContourView();
-            var result = contourlist.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                refreshImage();
-            }
+            contourlist.ShowDialog();
+            imageHandler.refreshImage();
         }
 
         private void toolStripButton8_Click(object sender, EventArgs e)
@@ -292,8 +267,6 @@ namespace BoneInspector_Rework
             {
                 this.Cursor = Cursors.Cross;
                 draw_contour = true;
-                currentContour = new Contour();
-                contours.Add(currentContour);
                 ContourOptions contourPanel = new ContourOptions();
                 contourPanel.Location = new Point(panel1.Width - contourPanel.Width, panel1.Height / 2);
                 contourPanel.Show();
@@ -302,15 +275,9 @@ namespace BoneInspector_Rework
             {
                 this.Cursor = Cursors.Default;
                 draw_contour = false;
-                processContour();
+                contourHandler.processContour();
             }
         }
-
-        
-
-        
-
-        
 
         /* Save contour file */
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -320,13 +287,13 @@ namespace BoneInspector_Rework
                 saveFileDialog1.Filter = "Contour Files (*.xml)|*.xml|All Files (*.*)|*.*";
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    writeContour(saveFileDialog1.FileName);
+                    contourHandler.writeContour(saveFileDialog1.FileName);
                     lastSavedFileName = saveFileDialog1.FileName;
                 }
             }
             else
             {
-                writeContour(lastSavedFileName);
+                contourHandler.writeContour(lastSavedFileName);
             }
         }
 
@@ -335,15 +302,15 @@ namespace BoneInspector_Rework
             toolStripButton2_Click(sender, e);
         }
 
-        private void saveContourAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            lastSavedFileName = null;
-            toolStripButton2_Click(sender, e);
-        }
 
         private void loadContourToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            openFileDialog2.Filter = "Contour Files (*.xml)|*.xml|All Files (*.*)|*.*";
+
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                 contourHandler.loadContour(saveFileDialog1.FileName);
+            }
         }
 
         private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -352,10 +319,3 @@ namespace BoneInspector_Rework
         }
     }
 }
-
-
-//////////////////////// ZOOI
-
-openFileDialog2.Filter = "Contour Files (*.xml)|*.xml|All Files (*.*)|*.*";
-
-            if (openFileDialog2.ShowDialog() == DialogResult.OK)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -7,15 +8,22 @@ using System.Threading.Tasks;
 
 namespace BoneInspector_Rework
 {
-    abstract class BaseContour
+    abstract public class BaseContour
     {
-        abstract enum Bones { }
 
-        private Bones name;
+        private HandBones name;
         private List<PointF> drawnPoints;
         private List<PointF> matchedPoints;
         private bool doneDrawing;
         private PointF labelPosition;
+
+        public enum HandBones
+        {
+            MC1, MC2, MC3, MC4, MC5,
+            PP1, PP2, PP3, PP4, PP5,
+            MP1, MP2, MP3, MP4, MP5,
+            DP1, DP2, DP3, DP4, DP5
+        }
 
         public BaseContour()
         {
@@ -34,12 +42,12 @@ namespace BoneInspector_Rework
             matchedPoints.Add(p);
         }
 
-        public void setName(Bones _name)
+        public void setName(HandBones _name)
         {
             this.name = _name;
         }
 
-        public Bones getName()
+        public HandBones getName()
         {
             return name;
         }
@@ -72,6 +80,24 @@ namespace BoneInspector_Rework
         public void setLabel(PointF p)
         {
             labelPosition = p;
+        }
+
+        /* Get the most right point with half of the contour length */
+        public PointF getLabelPosition()
+        {
+            Debug.Assert(matchedPoints[0] != null);
+            PointF mostRight = matchedPoints[0];
+
+            double yPosition = 0;
+            foreach (PointF p in matchedPoints)
+            {
+                yPosition += p.Y;
+                if (p.X > mostRight.X)
+                {
+                    mostRight = p;
+                }
+            }
+            return new PointF(mostRight.X, (float)yPosition / (float)matchedPoints.Count);
         }
     }
 }

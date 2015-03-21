@@ -12,20 +12,24 @@ namespace BoneInspector_Rework
 {
     public partial class ContourView : Form
     {
-        List<Contour> list;
-        List<Contour> toDelete;
+        ContourHandler contourHandler;
+
+        List<BaseContour> list;
+        List<BaseContour> toDelete;
 
         public ContourView()
         {
+            contourHandler = ContourHandler.Instance;
+
             InitializeComponent();
-            toDelete = new List<Contour>();
+            toDelete = new List<BaseContour>();
             setContours();
         }
 
         /* OK Button */
         private void button3_Click(object sender, EventArgs e)
         {
-            foreach (Contour c in toDelete)
+            foreach (BaseContour c in toDelete)
             {
                 list.Remove(c);
             }
@@ -35,8 +39,8 @@ namespace BoneInspector_Rework
         private void setContours()
         {
             listBox1.Items.Clear();
-            list = MainView.getInstance().getContours();
-            foreach (Contour c in list)
+            list = contourHandler.getContours();
+            foreach (BaseContour c in list)
             {
                 listBox1.Items.Add(c.getName());
             }
@@ -46,8 +50,8 @@ namespace BoneInspector_Rework
         {
             if (listBox1.SelectedIndex != -1)
             {
-                Contour.Bones name = (Contour.Bones)listBox1.Items[listBox1.SelectedIndex];
-                foreach (Contour c in list)
+                BaseContour.HandBones name = (BaseContour.HandBones)listBox1.Items[listBox1.SelectedIndex];
+                foreach (BaseContour c in list)
                 {
                     if (c.getName() == name)
                     {
@@ -65,8 +69,8 @@ namespace BoneInspector_Rework
         {
             if (listBox1.SelectedIndex != -1)
             {
-                Contour.Bones name = (Contour.Bones)listBox1.Items[listBox1.SelectedIndex];
-                foreach (Contour c in list)
+                BaseContour.HandBones name = (BaseContour.HandBones)listBox1.Items[listBox1.SelectedIndex];
+                foreach (BaseContour c in list)
                 {
                     if (c.getName() == name)
                     {

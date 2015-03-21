@@ -14,9 +14,8 @@ namespace BoneInspector_Rework
     class ImageHandler
     {
         private static ImageHandler instance;
-        private static DrawHandler drawer;
 
-        private static const double MIN_ZOOM = 0.11;
+        private const double MIN_ZOOM = 0.11;
         private FIBITMAP dib, dib_orig;
         private Graphics g;
         private Bitmap image;
@@ -31,7 +30,6 @@ namespace BoneInspector_Rework
                 MessageBox.Show("Could not find the FreeImage dll", "FreeImageDLL not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            drawer = DrawHandler.Instance;
             zoomValue = 1;
         }
 
@@ -53,7 +51,7 @@ namespace BoneInspector_Rework
             dib = dib_orig;
         }
 
-        private void rescale(double newZoom)
+        public void rescale(double newZoom)
         {
             if (newZoom != zoomValue)
             {
@@ -63,11 +61,12 @@ namespace BoneInspector_Rework
                     rescaled = true;
                 }
             }
+            refreshImage();
         }
 
         public Bitmap refreshImage()
         {
-            if (rescaled)
+            if (rescaled && dib != null)
             {
                 int x = (int)((double)FreeImage.GetWidth(dib_orig) * zoomValue);
                 int y = (int)((double)FreeImage.GetHeight(dib_orig) * zoomValue);
@@ -75,18 +74,16 @@ namespace BoneInspector_Rework
                 rescaled = false;
             }
 
-            if (image == null)
+            if (image == null && dib != null)
             {
-                if (dib != null)
-                {
-                    image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-                    g = Graphics.FromImage(image);
-                    g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-                }
+                image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
+                g = Graphics.FromImage(image);
+                g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
+                
             }
 
-            drawer.drawLines(g);
-            drawer.drawStrings(g);
+            // Draw the neccesary overlay
+            DrawHandler.Instance.drawAll(g);
 
             return image;
         }
@@ -97,6 +94,7 @@ namespace BoneInspector_Rework
             {
                 FreeImage.FlipHorizontal(dib_orig);
                 dib = dib_orig;
+                refreshImage();
             }
         }
 
@@ -106,12 +104,28 @@ namespace BoneInspector_Rework
             {
                 FreeImage.FlipVertical(dib_orig);
                 dib = dib_orig;
+                refreshImage();
+            }
+        }
+
+        public void invert()
+        {
+            if (!dib_orig.IsNull)
+            {
+                FreeImage.Invert(dib_orig);
+                dib = dib_orig;
+                refreshImage();
             }
         }
 
         public double getZoom()
         {
             return zoomValue;
+        }
+
+        public void zoomToWidth(int panelWidth)
+        {
+            rescale((double)panelWidth / (double)FreeImage.GetWidth(dib_orig));
         }
     }
 }

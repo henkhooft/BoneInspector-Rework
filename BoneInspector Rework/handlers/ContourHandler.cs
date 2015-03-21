@@ -1,9 +1,12 @@
-﻿using System;
+﻿using BoneInspector_Rework.contour;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BoneInspector_Rework
 {
@@ -35,8 +38,24 @@ namespace BoneInspector_Rework
             return contours;
         }
 
-        public void addContour(BaseContour c)
+        public void newContour(int type)
         {
+            BaseContour c = null;
+
+            switch (type)
+            {
+                case 1:
+                    c = new HandContour();
+                    break;
+                case 2:
+                    c = new FeetContour();
+                    break;
+                default:
+                    Debug.WriteLine("Contour type not recognized");
+                    return;
+            }
+
+            currentContour = c;
             contours.Add(c);
         }
 
@@ -53,26 +72,20 @@ namespace BoneInspector_Rework
         public void processContour()
         {
             // Contour is drawn, process it now
-            if (currentContour.getPoints().Count > 2)
+            if (currentContour.getDrawnPoints().Count > 2)
             {
                 SelectBone bone = new SelectBone();
                 var result = bone.ShowDialog();
                 if (result == DialogResult.OK)
                 {
                     currentContour.setName(bone.ReturnValue1);
-                    currentContour.setLabel(getRealPInvert(fishLines.Last().getPoint(1)));
+                    currentContour.setLabel(currentContour.getLabelPosition());
                     currentContour.setDone();
-                    drawStrings();
                 }
                 else
                 {
-                    currentContour.getPoints().Clear();
+                    currentContour.getDrawnPoints().Clear();
                 }
-
-                draw_contour = false;
-                draw_contour_first = false;
-                fishLines.Clear();
-                refreshImage();
             }
         }
 

@@ -16,7 +16,6 @@
             if (disposing && (components != null))
             {
                 components.Dispose();
-                image.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -40,7 +39,6 @@
             this.negativeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveContourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveContourAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadContourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openContourListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,7 +142,6 @@
             // 
             this.contourToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveContourToolStripMenuItem,
-            this.saveContourAsToolStripMenuItem,
             this.loadContourToolStripMenuItem,
             this.openContourListToolStripMenuItem});
             this.contourToolStripMenuItem.Name = "contourToolStripMenuItem";
@@ -157,13 +154,6 @@
             this.saveContourToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveContourToolStripMenuItem.Text = "Save Contour";
             this.saveContourToolStripMenuItem.Click += new System.EventHandler(this.saveContourToolStripMenuItem_Click);
-            // 
-            // saveContourAsToolStripMenuItem
-            // 
-            this.saveContourAsToolStripMenuItem.Name = "saveContourAsToolStripMenuItem";
-            this.saveContourAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveContourAsToolStripMenuItem.Text = "Save Contour As...";
-            this.saveContourAsToolStripMenuItem.Click += new System.EventHandler(this.saveContourAsToolStripMenuItem_Click);
             // 
             // loadContourToolStripMenuItem
             // 
@@ -191,14 +181,14 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -371,7 +361,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.Form1_Click);
+            this.pictureBox1.Click += new System.EventHandler(this.PictureBox1_Click);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
             // openFileDialog2
@@ -441,7 +431,6 @@
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.ToolStripMenuItem saveContourAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripComboBox boneTypeBox;
 

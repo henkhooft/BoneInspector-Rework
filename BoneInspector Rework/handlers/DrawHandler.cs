@@ -36,6 +36,12 @@ namespace BoneInspector_Rework.handlers
             }
         }
 
+        public void drawAll(Graphics g)
+        {
+            drawLines(g);
+            drawStrings(g);
+        }
+
         /* Returns the real point coordinates with relation to the zoom level in use */
         private PointF getRealP(PointF p)
         {
@@ -44,7 +50,7 @@ namespace BoneInspector_Rework.handlers
         }
 
         /* Calculates the real point coordinates back from the zoom level */
-        private PointF getRealPInvert(PointF p)
+        public PointF getRealPInvert(PointF p)
         {
             double zoomValue = imageHandler.getZoom();
             return new PointF((float)(p.X / zoomValue), (float)(p.Y / zoomValue));
@@ -52,7 +58,6 @@ namespace BoneInspector_Rework.handlers
 
         public void setFishLines(PointF p1, PointF p2)
         {
-
             fishLines = PointCalculator.getFishLine(p1, p2);
         }
 
@@ -114,7 +119,7 @@ namespace BoneInspector_Rework.handlers
                         if (line.getMatched())
                             finished++;
                     }
-                    if (finished >= fishLines.Count - 1 && draw_contour)
+                    if (finished >= fishLines.Count - 1)
                     {
                         contourHandler.processContour();
                     }

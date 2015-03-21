@@ -12,19 +12,19 @@ namespace BoneInspector_Rework
 {
     public partial class SelectBone : Form
     {
-        public Contour.Bones ReturnValue1;
+        public BaseContour.HandBones ReturnValue1;
 
         public SelectBone()
         {
             InitializeComponent();
 
-            foreach (var item in Enum.GetValues(typeof(Contour.Bones)))
+            foreach (var item in Enum.GetValues(typeof(BaseContour.HandBones)))
             {
                 comboBox1.Items.Add(item);
             }
 
-            List<Contour> list = MainView.getInstance().getContours();
-            foreach (Contour c in list)
+            List<BaseContour> list = ContourHandler.Instance.getContours();
+            foreach (BaseContour c in list)
             {
                 if (c.getDone())
                     comboBox1.Items.Remove(c.getName());
@@ -35,7 +35,7 @@ namespace BoneInspector_Rework
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.ReturnValue1 = (Contour.Bones)comboBox1.SelectedItem;
+            this.ReturnValue1 = (BaseContour.HandBones)comboBox1.SelectedItem;
             this.Close();
         }
 

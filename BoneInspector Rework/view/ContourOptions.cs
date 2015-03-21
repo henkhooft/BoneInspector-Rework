@@ -12,33 +12,27 @@ namespace BoneInspector_Rework
 {
     public partial class ContourOptions : Form
     {
-        Contour c;
-        MainView main;
 
         public ContourOptions()
         {
             InitializeComponent();
-
-            main = MainView.getInstance();
-            List<Contour> contours = main.getContours();
-            c = contours.Last();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            c.getPoints().Clear();
-            c.getMatchedPoints().Clear();
-            main.refreshImage();
+            ContourHandler.Instance.setCurrent(null);
             this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (c.getPoints().Count > 1)
+            BaseContour c = ContourHandler.Instance.getCurrent();
+
+
+            if (c.getDrawnPoints().Count > 1)
             {
-                c.getPoints().Remove(c.getPoints().Last());
-                c.getMatchedPoints().Remove(c.getMatchedPoints().Last());
-                main.refreshImage();
+                c.getDrawnPoints().Remove(c.getDrawnPoints().Last());
+                // c.getMatchedPoints().Remove(c.getMatchedPoints().Last());
             }
         }
     }
