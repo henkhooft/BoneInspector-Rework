@@ -1,4 +1,5 @@
 ﻿using BoneInspector_Rework.contour;
+using BoneInspector_Rework.handlers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ namespace BoneInspector_Rework
     class ContourHandler
     {
         private static ContourHandler instance;
+
         private List<BaseContour> contours;
         private BaseContour currentContour;
 
@@ -38,23 +40,9 @@ namespace BoneInspector_Rework
             return contours;
         }
 
-        public void newContour(int type)
+        public void newContour()
         {
-            BaseContour c = null;
-
-            switch (type)
-            {
-                case 1:
-                    c = new HandContour();
-                    break;
-                case 2:
-                    c = new FeetContour();
-                    break;
-                default:
-                    Debug.WriteLine("Contour type not recognized");
-                    return;
-            }
-
+            BaseContour c = new BaseContour();
             currentContour = c;
             contours.Add(c);
         }
@@ -69,22 +57,51 @@ namespace BoneInspector_Rework
             currentContour = c;
         }
 
+        public void clearCurrent()
+        {
+            if (currentContour != null)
+            {
+                contours.Remove(currentContour);
+                currentContour = null;
+                DrawHandler.Instance.clearFishLines();
+                ImageHandler.Instance.refreshImage();
+            }
+        }
+
+        public void removeLastPoint()
+        {
+            if (currentContour != null)
+            {
+                currentContour.removeLastPoint();
+                ImageHandler.Instance.refreshImage();
+            }
+        }
+
         public void processContour()
         {
-            // Contour is drawn, process it now
-            if (currentContour.getDrawnPoints().Count > 2)
+            if (currentContour != null)
             {
-                SelectBone bone = new SelectBone();
-                var result = bone.ShowDialog();
-                if (result == DialogResult.OK)
+
+                // Contour is drawn, process it now
+                if (currentContour.getDrawnPoints().Count > 2)
                 {
-                    currentContour.setName(bone.ReturnValue1);
-                    currentContour.setLabel(currentContour.getLabelPosition());
-                    currentContour.setDone();
-                }
-                else
-                {
-                    currentContour.getDrawnPoints().Clear();
+                    SelectBone bone = new SelectBone();
+                    var result = bone.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        currentContour.setName(bone.ReturnValue1);
+                        currentContour.setLabel(currentContour.getLabelPosition());
+                        currentContour.setDone();
+
+                        MainView.Instance.setDrawing();
+                        MainView.Instance.removeContourOptions();
+                        DrawHandler.Instance.clearFishLines();
+                        ImageHandler.Instance.refreshImage();
+                    }
+                    else
+                    {
+                        currentContour.getDrawnPoints().Clear();
+                    }
                 }
             }
         }
@@ -123,6 +140,7 @@ namespace BoneInspector_Rework
                 file = new StreamReader(@filename);
 
                 contours = (List<BaseContour>)reader.Deserialize(file);
+                ImageHandler.Instance.refreshImage();
             }
             catch (IOException e)
             {

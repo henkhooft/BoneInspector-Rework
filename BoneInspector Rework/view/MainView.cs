@@ -31,8 +31,9 @@ namespace BoneInspector_Rework
         private PointF draw_fish_first_point;
         private bool draw_contour = false;
         private bool draw_contour_first = false;
+        private ContourOptions contourPanel;
 
-        
+
 
 
         private MainView()
@@ -42,7 +43,7 @@ namespace BoneInspector_Rework
             drawHandler = DrawHandler.Instance;
             contourHandler = ContourHandler.Instance;
             InitializeComponent();
-            
+
             // Disable all buttons while no image is loaded
             saveFileButton.Enabled = false;
             fishlineButton.Enabled = false;
@@ -70,6 +71,11 @@ namespace BoneInspector_Rework
                 }
                 return instance;
             }
+        }
+
+        public void setPicture(Bitmap b)
+        {
+            pictureBox1.Image = b;
         }
 
 
@@ -103,7 +109,6 @@ namespace BoneInspector_Rework
                 boneTypeBox.SelectedIndex = 0;
 
                 imageHandler.loadImage(openFileDialog1.FileName);
-                pictureBox1.Image = imageHandler.refreshImage();
             }
             else return;
 
@@ -167,15 +172,18 @@ namespace BoneInspector_Rework
         /* Enable drawing fish lines */
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            if (this.Cursor != Cursors.Cross)
+            if (!draw_contour)
             {
-                this.Cursor = Cursors.Cross;
-                draw_fish = true;
-            }
-            else
-            {
-                this.Cursor = Cursors.Default;
-                draw_fish = false;
+                if (this.Cursor != Cursors.Cross)
+                {
+                    this.Cursor = Cursors.Cross;
+                    draw_fish = true;
+                }
+                else
+                {
+                    this.Cursor = Cursors.Default;
+                    draw_fish = false;
+                }
             }
         }
 
@@ -218,7 +226,6 @@ namespace BoneInspector_Rework
                 }
                 else
                 {
-                    contourHandler.newContour(1);
                     contourHandler.getCurrent().addPoint(drawHandler.getRealPInvert(curs));
                     draw_contour_first = true;
                 }
@@ -226,7 +233,7 @@ namespace BoneInspector_Rework
             }
         }
 
-        
+
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -263,19 +270,36 @@ namespace BoneInspector_Rework
         /* Start drawing contour lines */
         private void toolStripButton7_Click(object sender, EventArgs e)
         {
-            if (this.Cursor != Cursors.Cross)
+            setDrawing();
+        }
+
+        public void setDrawing()
+        {
+            if (!draw_fish)
             {
-                this.Cursor = Cursors.Cross;
-                draw_contour = true;
-                ContourOptions contourPanel = new ContourOptions();
-                contourPanel.Location = new Point(panel1.Width - contourPanel.Width, panel1.Height / 2);
-                contourPanel.Show();
+                if (this.Cursor != Cursors.Cross)
+                {
+                    this.Cursor = Cursors.Cross;
+                    draw_contour = true;
+                    contourHandler.newContour();
+                    contourPanel = new ContourOptions();
+                    contourPanel.Location = new Point(panel1.Width - contourPanel.Width, panel1.Height / 2);
+                    contourPanel.Show();
+                    panel1.Focus();
+                }
+                else
+                {
+                    this.Cursor = Cursors.Default;
+                    draw_contour = false;
+                }
             }
-            else
+        }
+
+        public void removeContourOptions()
+        {
+            if (contourPanel != null)
             {
-                this.Cursor = Cursors.Default;
-                draw_contour = false;
-                contourHandler.processContour();
+                contourPanel.Hide();
             }
         }
 
@@ -309,7 +333,7 @@ namespace BoneInspector_Rework
 
             if (openFileDialog2.ShowDialog() == DialogResult.OK)
             {
-                 contourHandler.loadContour(saveFileDialog1.FileName);
+                contourHandler.loadContour(openFileDialog2.FileName);
             }
         }
 

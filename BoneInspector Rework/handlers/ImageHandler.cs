@@ -49,6 +49,7 @@ namespace BoneInspector_Rework
         {
             dib_orig = FreeImage.LoadEx(@filename);
             dib = dib_orig;
+            refreshImage();
         }
 
         public void rescale(double newZoom)
@@ -64,7 +65,7 @@ namespace BoneInspector_Rework
             refreshImage();
         }
 
-        public Bitmap refreshImage()
+        public void refreshImage()
         {
             if (rescaled && dib != null)
             {
@@ -74,7 +75,7 @@ namespace BoneInspector_Rework
                 rescaled = false;
             }
 
-            if (image == null && dib != null)
+            if (dib != null)
             {
                 image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
                 g = Graphics.FromImage(image);
@@ -85,7 +86,7 @@ namespace BoneInspector_Rework
             // Draw the neccesary overlay
             DrawHandler.Instance.drawAll(g);
 
-            return image;
+            MainView.Instance.setPicture(image);
         }
 
         public void flipHorizontally()

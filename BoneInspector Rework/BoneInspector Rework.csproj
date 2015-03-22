@@ -86,8 +86,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="contour\FeetContour.cs" />
-    <Compile Include="contour\HandContour.cs" />
     <Compile Include="handlers\DrawHandler.cs" />
     <Compile Include="points\Line.cs" />
     <Compile Include="view\AboutBox1.cs">

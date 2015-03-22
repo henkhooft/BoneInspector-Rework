@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoneInspector_Rework.handlers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,20 +21,17 @@ namespace BoneInspector_Rework
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ContourHandler.Instance.setCurrent(null);
+            ContourHandler h = ContourHandler.Instance;
+            h.clearCurrent();
+
+            MainView.Instance.setDrawing();
+
             this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            BaseContour c = ContourHandler.Instance.getCurrent();
-
-
-            if (c.getDrawnPoints().Count > 1)
-            {
-                c.getDrawnPoints().Remove(c.getDrawnPoints().Last());
-                // c.getMatchedPoints().Remove(c.getMatchedPoints().Last());
-            }
+            ContourHandler.Instance.removeLastPoint();
         }
     }
 }

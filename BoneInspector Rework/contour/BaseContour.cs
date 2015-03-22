@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BoneInspector_Rework.handlers;
+using BoneInspector_Rework.points;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -6,16 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BoneInspector_Rework
+namespace BoneInspector_Rework.contour
 {
-    abstract public class BaseContour
+    public class BaseContour
     {
 
-        private HandBones name;
-        private List<PointF> drawnPoints;
-        private List<PointF> matchedPoints;
-        private bool doneDrawing;
-        private PointF labelPosition;
+        public HandBones name;
+        public List<PointF> drawnPoints;
+        public List<PointF> matchedPoints;
+        public bool doneDrawing;
+        public PointF labelPosition;
+
+        private PointF last_p;
 
         public enum HandBones
         {
@@ -32,12 +36,37 @@ namespace BoneInspector_Rework
             doneDrawing = false;
         }
 
+        public List<PointF> getMatching(PointF p1, PointF p2, bool lineMatch)
+        {
+            List<PointF> matching = new List<PointF>();
+            double radius = 5;
+            foreach (Line line in DrawHandler.Instance.getFishLines())
+            {
+                PointF intersection = PointCalculator.getIntersection(p2, p1, line.getPoint(0), line.getPoint(1));
+                if (intersection.X != 0)
+                {
+                    matching.Add(new PointF((float)(intersection.X - radius / 2.0), (float)(intersection.Y - radius / 2.0)));
+                    line.setMatched(lineMatch);
+                }
+            }
+
+            return matching;
+        }
+
         public void addPoint(PointF p)
         {
             drawnPoints.Add(p);
+
+            /* Calculate matching points */
+            if (drawnPoints.Count >= 2)
+            {
+                matchedPoints.AddRange(getMatching(p, last_p, true));
+            }
+
+            last_p = p;
         }
 
-        public void addMatchedPoint(PointF p)
+        private void addMatchedPoint(PointF p)
         {
             matchedPoints.Add(p);
         }
@@ -82,6 +111,19 @@ namespace BoneInspector_Rework
             labelPosition = p;
         }
 
+        public void removeLastPoint()
+        {
+            if (drawnPoints.Count > 1)
+            {
+                last_p = drawnPoints[drawnPoints.Count-2];
+                foreach (PointF p in getMatching(drawnPoints.Last(), last_p, false))
+                {
+                    matchedPoints.Remove(p);
+                }
+                drawnPoints.Remove(drawnPoints.Last());
+            }
+        }
+
         /* Get the most right point with half of the contour length */
         public PointF getLabelPosition()
         {
@@ -97,7 +139,7 @@ namespace BoneInspector_Rework
                     mostRight = p;
                 }
             }
-            return new PointF(mostRight.X, (float)yPosition / (float)matchedPoints.Count);
+            return new PointF(mostRight.X + 50, (float)yPosition / (float)matchedPoints.Count);
         }
     }
 }
