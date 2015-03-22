@@ -59,7 +59,7 @@ namespace BoneInspector_Rework.handlers
 
         public void setFishLines(PointF p1, PointF p2)
         {
-            fishLines = PointCalculator.getFishLine(p1, p2);
+            fishLines = PointCalculator.getFishLine(getRealPInvert(p1), getRealPInvert(p2));
         }
 
         public void clearFishLines()
