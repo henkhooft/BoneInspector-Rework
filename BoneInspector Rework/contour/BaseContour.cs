@@ -13,7 +13,7 @@ namespace BoneInspector_Rework.contour
     public class BaseContour
     {
 
-        public HandBones name;
+        public string name;
         public List<PointF> drawnPoints;
         public List<PointF> matchedPoints;
         public bool doneDrawing;
@@ -21,13 +21,13 @@ namespace BoneInspector_Rework.contour
 
         private PointF last_p;
 
-        public enum HandBones
-        {
-            MC1, MC2, MC3, MC4, MC5,
-            PP1, PP2, PP3, PP4, PP5,
-            MP1, MP2, MP3, MP4, MP5,
-            DP1, DP2, DP3, DP4, DP5
-        }
+        //public enum HandBones
+        //{
+        //    MC1, MC2, MC3, MC4, MC5,
+        //    PP1, PP2, PP3, PP4, PP5,
+        //    MP1, MP2, MP3, MP4, MP5,
+        //    DP1, DP2, DP3, DP4, DP5
+        //}
 
         public BaseContour()
         {
@@ -35,6 +35,29 @@ namespace BoneInspector_Rework.contour
             matchedPoints = new List<PointF>();
             doneDrawing = false;
         }
+
+        public static string[] getBoneTypes(int index)
+        {
+            switch (index)
+            {
+                case 0: // Hand
+                    return new string[] {
+                        "MC1", "MC2", "MC3", "MC4", "MC5",
+                        "PP1", "PP2", "PP3", "PP4", "PP5",
+                        "MP1", "MP2", "MP3", "MP4", "MP5",
+                        "DP1", "DP2", "DP3", "DP4", "DP5"
+                    };
+                case 1: // Feet
+                    return new string[] {
+                        "DIP1", "DIP2", "DIP3", "DIP4", "DIP5",
+                        "MTP1", "MTP2", "MTP3", "MTP4", "MTP5"
+                    };
+                default:
+                    break;
+            }
+            return new string[1];
+        }
+
 
         public List<PointF> getMatching(PointF p1, PointF p2, bool lineMatch)
         {
@@ -71,12 +94,12 @@ namespace BoneInspector_Rework.contour
             matchedPoints.Add(p);
         }
 
-        public void setName(HandBones _name)
+        public void setName(string _name)
         {
             this.name = _name;
         }
 
-        public HandBones getName()
+        public string getName()
         {
             return name;
         }
@@ -115,7 +138,7 @@ namespace BoneInspector_Rework.contour
         {
             if (drawnPoints.Count > 1)
             {
-                last_p = drawnPoints[drawnPoints.Count-2];
+                last_p = drawnPoints[drawnPoints.Count - 2];
                 foreach (PointF p in getMatching(drawnPoints.Last(), last_p, false))
                 {
                     matchedPoints.Remove(p);

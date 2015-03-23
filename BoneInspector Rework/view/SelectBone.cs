@@ -13,13 +13,13 @@ namespace BoneInspector_Rework
 {
     public partial class SelectBone : Form
     {
-        public BaseContour.HandBones ReturnValue1;
+        public string ReturnValue1;
 
         public SelectBone()
         {
             InitializeComponent();
 
-            foreach (var item in Enum.GetValues(typeof(BaseContour.HandBones)))
+            foreach (var item in BaseContour.getBoneTypes(MainView.Instance.getBoneType()))
             {
                 comboBox1.Items.Add(item);
             }
@@ -36,7 +36,7 @@ namespace BoneInspector_Rework
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.ReturnValue1 = (BaseContour.HandBones)comboBox1.SelectedItem;
+            this.ReturnValue1 = (string)comboBox1.SelectedItem;
             this.Close();
         }
 

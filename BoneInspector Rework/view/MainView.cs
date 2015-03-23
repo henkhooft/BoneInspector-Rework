@@ -359,6 +359,12 @@ namespace BoneInspector_Rework
             panel1.Focus();
         }
 
+        /* Get current bone type (Hand/Feet) */
+        public int getBoneType()
+        {
+            return boneTypeBox.SelectedIndex;
+        }
+
         private void customFishlineButton_Click(object sender, EventArgs e)
         {
             if (!draw_contour)

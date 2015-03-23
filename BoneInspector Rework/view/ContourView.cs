@@ -51,7 +51,7 @@ namespace BoneInspector_Rework
         {
             if (listBox1.SelectedIndex != -1)
             {
-                BaseContour.HandBones name = (BaseContour.HandBones)listBox1.Items[listBox1.SelectedIndex];
+                string name = (string)listBox1.Items[listBox1.SelectedIndex];
                 foreach (BaseContour c in list)
                 {
                     if (c.getName() == name)
@@ -70,7 +70,7 @@ namespace BoneInspector_Rework
         {
             if (listBox1.SelectedIndex != -1)
             {
-                BaseContour.HandBones name = (BaseContour.HandBones)listBox1.Items[listBox1.SelectedIndex];
+                string name = (string)listBox1.Items[listBox1.SelectedIndex];
                 foreach (BaseContour c in list)
                 {
                     if (c.getName() == name)
