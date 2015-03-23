@@ -63,6 +63,36 @@ namespace BoneInspector_Rework
             }
         }
 
+        public static List<Line> getFishLine(PointF p1, PointF p2, double pixelsPerCentimeter)
+        {
+            List<Line> lines = getFishLine(p1, p2);
+            double length = Properties.Settings.Default.var_fish_length * pixelsPerCentimeter;
+            double d_ax = length / getDistance(p1, p2);
+            PointF cutoff = getPartOfLine(p1, p2, d_ax);
+
+            // TODO finish cutoff sequence
+            List<Line> toRemove = new List<Line>();
+            foreach (Line l in lines)
+            {
+                if (getDistance(p1, l.getPoint(0)) > getDistance(p1, cutoff))
+                {
+                    toRemove.Add(l);
+                }
+            }
+            foreach (Line l in toRemove)
+            {
+                lines.Remove(l);
+            }
+
+            // Replace line with a new one at cutoff point
+            if (toRemove.Count > 0)
+            {
+                lines[0] = new Line(lines[0].getPoint(0), cutoff);
+            }
+
+            return lines;
+        }
+
         public static List<Line> getFishLine(PointF p1, PointF p2)
         {
             Debug.Assert(p1 != null && p2 != null);

@@ -21,6 +21,7 @@ namespace BoneInspector_Rework
         private Bitmap image;
         private bool rescaled;
         private double zoomValue;
+        private double pixelsPerCentimeter;
 
 
         private ImageHandler()
@@ -49,7 +50,16 @@ namespace BoneInspector_Rework
         {
             dib_orig = FreeImage.LoadEx(@filename);
             dib = dib_orig;
+            pixelsPerCentimeter = (double)FreeImage.GetResolutionX(dib) / 2.54;
+            DrawHandler.Instance.clearFishLines();
+            ContourHandler.Instance.clearAll();
+
             refreshImage();
+        }
+
+        public double getPixelsPerCentimeter()
+        {
+            return pixelsPerCentimeter;
         }
 
         public void rescale(double newZoom)

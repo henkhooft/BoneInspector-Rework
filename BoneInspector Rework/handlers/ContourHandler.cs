@@ -68,6 +68,12 @@ namespace BoneInspector_Rework
             }
         }
 
+        public void clearAll()
+        {
+            contours.Clear();
+            currentContour = null;
+        }
+
         public void removeLastPoint()
         {
             if (currentContour != null)

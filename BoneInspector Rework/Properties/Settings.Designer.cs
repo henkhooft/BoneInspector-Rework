@@ -70,5 +70,17 @@ namespace BoneInspector_Rework.Properties {
                 this["line_length"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public double var_fish_length {
+            get {
+                return ((double)(this["var_fish_length"]));
+            }
+            set {
+                this["var_fish_length"] = value;
+            }
+        }
     }
 }

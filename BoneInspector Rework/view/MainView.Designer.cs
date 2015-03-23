@@ -63,6 +63,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.customFishlineButton = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -95,7 +96,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -103,7 +104,7 @@
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -205,6 +206,7 @@
             this.toolStripSeparator2,
             this.contourListButton,
             this.fishlineButton,
+            this.customFishlineButton,
             this.contourButton,
             this.toolStripSeparator3,
             this.boneTypeBox});
@@ -303,6 +305,7 @@
             // 
             // fishlineButton
             // 
+            this.fishlineButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.fishlineButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.fishlineButton.Image = ((System.Drawing.Image)(resources.GetObject("fishlineButton.Image")));
             this.fishlineButton.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -372,6 +375,18 @@
             // 
             this.saveFileDialog1.Title = "Save a contour file";
             // 
+            // customFishlineButton
+            // 
+            this.customFishlineButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.customFishlineButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.customFishlineButton.Image = ((System.Drawing.Image)(resources.GetObject("customFishlineButton.Image")));
+            this.customFishlineButton.ImageTransparentColor = System.Drawing.Color.DarkMagenta;
+            this.customFishlineButton.Name = "customFishlineButton";
+            this.customFishlineButton.Size = new System.Drawing.Size(23, 22);
+            this.customFishlineButton.Text = "toolStripButton1";
+            this.customFishlineButton.ToolTipText = "Draw custom length fishlines";
+            this.customFishlineButton.Click += new System.EventHandler(this.customFishlineButton_Click);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -433,6 +448,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripComboBox boneTypeBox;
+        private System.Windows.Forms.ToolStripButton customFishlineButton;
 
 
     }

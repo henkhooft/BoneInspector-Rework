@@ -57,9 +57,17 @@ namespace BoneInspector_Rework.handlers
             return new PointF((float)(p.X / zoomValue), (float)(p.Y / zoomValue));
         }
 
-        public void setFishLines(PointF p1, PointF p2)
+        public void setFishLines(PointF p1, PointF p2, bool customFishLines)
         {
-            fishLines = PointCalculator.getFishLine(getRealPInvert(p1), getRealPInvert(p2));
+            if (customFishLines)
+            {
+                double pixelsPerCentimeter = ImageHandler.Instance.getPixelsPerCentimeter();
+                fishLines = PointCalculator.getFishLine(getRealPInvert(p1), getRealPInvert(p2), pixelsPerCentimeter);
+            }
+            else
+            {
+                fishLines = PointCalculator.getFishLine(getRealPInvert(p1), getRealPInvert(p2));
+            }
         }
 
         public void clearFishLines()
@@ -107,8 +115,6 @@ namespace BoneInspector_Rework.handlers
                     g.DrawEllipse(mypen, matchedPointFix.X, matchedPointFix.Y, 5, 5);
                 }
 
-                // TODO last intersecting fishline
-
                 /* Check if contour is done */
                 if (!c.getDone())
                 {
@@ -124,59 +130,6 @@ namespace BoneInspector_Rework.handlers
                     }
                 }
             }
-
-            //PointF p_old = c.getDrawnPoints()[0];
-            //if (!c.getDone())
-            //{
-            //    Line lastDrawn = null;
-
-            //    foreach (PointF p in c.getDrawnPoints())
-            //    {
-            //        g.DrawLine(mypen, getRealP(p_old), getRealP(p));
-
-            //        // Draw intersection point
-            //        if (fishLines.Count > 0)
-            //        {
-            //            foreach (Line line in fishLines)
-            //            {
-            //                PointF intersection = getRealP(PointCalculator.getIntersection(p_old, p, line.getPoint(0), line.getPoint(1)));
-            //                if (intersection.X != 0)
-            //                {
-            //                    g.DrawEllipse(mypen, intersection.X - radius / 2, intersection.Y - radius / 2, radius, radius);
-            //                    contourHandler.getCurrent().addMatchedPoint(new PointF(intersection.X - radius / 2, intersection.Y - radius / 2));
-            //                    line.setMatched(true);
-            //                    lastDrawn = line;
-            //                }
-            //            }
-            //        }
-            //        p_old = p;
-            //    }
-            //    if (lastDrawn != null)
-            //        g.DrawLine(Pens.Yellow, getRealP(lastDrawn.getPoint(0)), getRealP(lastDrawn.getPoint(1)));
-
-            //    int finished = 0;
-            //    foreach (Line line in fishLines)
-            //    {
-            //        if (line.getMatched())
-            //            finished++;
-            //    }
-            //    if (finished >= fishLines.Count - 1 && finished > 0)
-            //    {
-            //        contourHandler.processContour();
-            //    }
-            //}
-            //else // Draw the already added contours
-            //{
-            //    foreach (PointF p in c.getDrawnPoints())
-            //    {
-            //        g.DrawLine(mypen, getRealP(p_old), getRealP(p));
-            //        p_old = p;
-            //    }
-            //    foreach (PointF p in c.getMatchedPoints())
-            //    {
-            //        PointF p_real = getRealP(p);
-            //        g.DrawEllipse(mypen, p_real.X, p_real.Y, radius, radius);
-            //    }
         }
 
         private void drawStrings(Graphics g)

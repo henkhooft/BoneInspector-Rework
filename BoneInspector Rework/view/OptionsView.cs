@@ -19,6 +19,7 @@ namespace BoneInspector_Rework
             numericUpDown2.Value = Properties.Settings.Default.angleSegments;
             numericUpDown3.Value = (decimal)Properties.Settings.Default.d_ax;
             numericUpDown4.Value = (decimal)Properties.Settings.Default.line_length;
+            numericUpDown5.Value = (decimal)Properties.Settings.Default.var_fish_length;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -27,6 +28,7 @@ namespace BoneInspector_Rework
             Properties.Settings.Default.angleSegments = (int)numericUpDown2.Value;
             Properties.Settings.Default.d_ax = (double)numericUpDown3.Value;
             Properties.Settings.Default.line_length = (double)numericUpDown4.Value;
+            Properties.Settings.Default.var_fish_length = (double)numericUpDown5.Value;
             Properties.Settings.Default.Save();
             this.Close();
         }

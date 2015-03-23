@@ -23,15 +23,18 @@ namespace BoneInspector_Rework
         private static ContourHandler contourHandler;
 
         // Globals
+        private ContourOptions contourPanel;
         private string lastSavedFileName = null;
+        private string pictureName = null;
 
         // Progress bools
         private bool draw_fish = false;
+        private bool draw_custom_fish = false;
         private bool draw_fish_first = false;
         private PointF draw_fish_first_point;
         private bool draw_contour = false;
         private bool draw_contour_first = false;
-        private ContourOptions contourPanel;
+        
 
 
 
@@ -57,6 +60,7 @@ namespace BoneInspector_Rework
             saveContourToolStripMenuItem.Enabled = false;
             loadContourToolStripMenuItem.Enabled = false;
             boneTypeBox.Visible = false;
+            customFishlineButton.Enabled = false;
 
             openFileDialog1 = new OpenFileDialog();
         }
@@ -107,7 +111,9 @@ namespace BoneInspector_Rework
                 loadContourToolStripMenuItem.Enabled = true;
                 boneTypeBox.Visible = true;
                 boneTypeBox.SelectedIndex = 0;
+                customFishlineButton.Enabled = true;
 
+                pictureName = System.IO.Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
                 imageHandler.loadImage(openFileDialog1.FileName);
             }
             else return;
@@ -201,9 +207,17 @@ namespace BoneInspector_Rework
                 if (draw_fish_first)
                 {
                     // Draw the fish line
-                    drawHandler.setFishLines(draw_fish_first_point, curs);
+                    if (draw_custom_fish)
+                    {
+                        drawHandler.setFishLines(draw_fish_first_point, curs, true);
+                    }
+                    else
+                    {
+                        drawHandler.setFishLines(draw_fish_first_point, curs, false);
+                    }
                     draw_fish_first = false;
                     draw_fish = false;
+                    draw_custom_fish = false;
                     this.Cursor = Cursors.Default;
                     imageHandler.refreshImage();
                 }
@@ -291,6 +305,7 @@ namespace BoneInspector_Rework
                 {
                     this.Cursor = Cursors.Default;
                     draw_contour = false;
+                    removeContourOptions();
                 }
             }
         }
@@ -309,6 +324,8 @@ namespace BoneInspector_Rework
             if (lastSavedFileName == null)
             {
                 saveFileDialog1.Filter = "Contour Files (*.xml)|*.xml|All Files (*.*)|*.*";
+                saveFileDialog1.FileName = pictureName;
+                saveFileDialog1.AddExtension = true;
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     contourHandler.writeContour(saveFileDialog1.FileName);
@@ -340,6 +357,25 @@ namespace BoneInspector_Rework
         private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             panel1.Focus();
+        }
+
+        private void customFishlineButton_Click(object sender, EventArgs e)
+        {
+            if (!draw_contour)
+            {
+                if (this.Cursor != Cursors.Cross)
+                {
+                    this.Cursor = Cursors.Cross;
+                    draw_fish = true;
+                    draw_custom_fish = true;
+                }
+                else
+                {
+                    this.Cursor = Cursors.Default;
+                    draw_fish = false;
+                    draw_custom_fish = false;
+                }
+            }
         }
     }
 }
