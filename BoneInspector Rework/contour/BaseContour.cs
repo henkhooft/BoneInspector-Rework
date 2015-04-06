@@ -45,12 +45,13 @@ namespace BoneInspector_Rework.contour
                         "MC1", "MC2", "MC3", "MC4", "MC5",
                         "PP1", "PP2", "PP3", "PP4", "PP5",
                         "MP1", "MP2", "MP3", "MP4", "MP5",
-                        "DP1", "DP2", "DP3", "DP4", "DP5"
+                        "DP1", "DP2", "DP3", "DP4", "DP5",
+                        "ULNA"
                     };
                 case 1: // Feet
                     return new string[] {
-                        "DIP1", "DIP2", "DIP3", "DIP4", "DIP5",
-                        "MTP1", "MTP2", "MTP3", "MTP4", "MTP5"
+                        "PP1", "PP2", "PP3", "PP4", "PP5",
+                        "MT1", "MT2", "MT3", "MT4", "MT5"
                     };
                 default:
                     break;

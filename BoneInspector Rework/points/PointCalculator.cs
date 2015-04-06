@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BoneInspector_Rework
 {
@@ -88,6 +89,10 @@ namespace BoneInspector_Rework
             if (toRemove.Count > 0)
             {
                 lines[0] = new Line(lines[0].getPoint(0), cutoff);
+            }
+            else
+            {
+                MessageBox.Show("The distance between the points is shorter than " + Properties.Settings.Default.var_fish_length + "cm", "Error calculating custom fishline" , MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return lines;

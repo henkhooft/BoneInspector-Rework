@@ -16,6 +16,8 @@ namespace BoneInspector_Rework
         private static ImageHandler instance;
 
         private const double MIN_ZOOM = 0.11;
+        private const double MAX_ZOOM = 2;
+
         private FIBITMAP dib, dib_orig;
         private Graphics g;
         private Bitmap image;
@@ -53,6 +55,7 @@ namespace BoneInspector_Rework
             pixelsPerCentimeter = (double)FreeImage.GetResolutionX(dib) / 2.54;
             DrawHandler.Instance.clearFishLines();
             ContourHandler.Instance.clearAll();
+            zoomValue = 1;
 
             refreshImage();
         }
@@ -66,7 +69,7 @@ namespace BoneInspector_Rework
         {
             if (newZoom != zoomValue)
             {
-                if (newZoom >= MIN_ZOOM)
+                if (newZoom >= MIN_ZOOM && newZoom <= MAX_ZOOM)
                 {
                     zoomValue = newZoom;
                     rescaled = true;
@@ -87,16 +90,24 @@ namespace BoneInspector_Rework
 
             if (dib != null)
             {
+                if (image != null)
+                {
+                    image.Dispose();
+                }
                 image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
+
                 g = Graphics.FromImage(image);
                 g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
-                
+
+                // Draw the neccesary overlay
+                DrawHandler.Instance.drawAll(g);
+                MainView.Instance.setPicture(image);
+
+                if (g != null)
+                {
+                    g.Dispose();
+                }
             }
-
-            // Draw the neccesary overlay
-            DrawHandler.Instance.drawAll(g);
-
-            MainView.Instance.setPicture(image);
         }
 
         public void flipHorizontally()
