@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>BoneInspector Rework</ProductName>
     <PublisherName>Rutger Hendriks</PublisherName>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
