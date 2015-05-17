@@ -66,7 +66,7 @@ namespace BoneInspector_Rework.handlers
             }
             else
             {
-                fishLines = PointCalculator.getFishLine(getRealPInvert(p1), getRealPInvert(p2));
+                fishLines = PointCalculator.getFishLine(getRealPInvert(p1), getRealPInvert(p2), false, new PointF());
             }
         }
 

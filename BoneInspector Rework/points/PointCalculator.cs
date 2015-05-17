@@ -64,41 +64,26 @@ namespace BoneInspector_Rework
             }
         }
 
+        /* Gets a list of lines composing a cutoff fishline structure */
         public static List<Line> getFishLine(PointF p1, PointF p2, double pixelsPerCentimeter)
         {
-            List<Line> lines = getFishLine(p1, p2);
+            //List<Line> lines = getFishLine(p1, p2);
             double length = Properties.Settings.Default.var_fish_length * pixelsPerCentimeter;
             double d_ax = length / getDistance(p1, p2);
             PointF cutoff = getPartOfLine(p1, p2, d_ax);
 
-            // TODO finish cutoff sequence
-            List<Line> toRemove = new List<Line>();
-            foreach (Line l in lines)
-            {
-                if (getDistance(p1, l.getPoint(0)) > getDistance(p1, cutoff))
-                {
-                    toRemove.Add(l);
-                }
-            }
-            foreach (Line l in toRemove)
-            {
-                lines.Remove(l);
-            }
+            // Second point now composes the determined cutoff point. Bool is so not to cut d_ax again.
+            List<Line> lines = getFishLine(p1, cutoff, true, p2);
 
-            // Replace line with a new one at cutoff point
-            if (toRemove.Count > 0)
+            if (getDistance(p1, p2) < getDistance(p1, cutoff))
             {
-                lines[0] = new Line(lines[0].getPoint(0), cutoff);
-            }
-            else
-            {
-                MessageBox.Show("The distance between the points is shorter than " + Properties.Settings.Default.var_fish_length + "cm", "Error calculating custom fishline" , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("The distance between the points is shorter than " + Properties.Settings.Default.var_fish_length + "cm", "Error calculating custom fishline", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return lines;
         }
 
-        public static List<Line> getFishLine(PointF p1, PointF p2)
+        public static List<Line> getFishLine(PointF p1, PointF p2, Boolean cutoff, PointF orig_prox)
         {
             Debug.Assert(p1 != null && p2 != null);
 
@@ -112,10 +97,27 @@ namespace BoneInspector_Rework
 
             // Construct distaal and proximaal points
             PointF p_dist = getPartOfLine(p1, p2, d_ax);
-            PointF p_prox = getPartOfLine(p1, p2, (1 - d_ax));
+            PointF p_prox;
+            if (!cutoff)
+            {
+                p_prox = getPartOfLine(p1, p2, (1 - d_ax));
+            }
+            else
+            {
+                p_prox = p2;
+            }
             lines.Add(new Line(p_dist, p_prox));
 
-            double d_length = getDistance(p1, p2);
+            double d_length = 0;
+            if (cutoff)
+            {
+                d_length = getDistance(p1, orig_prox);
+            }
+            else
+            {
+                d_length = getDistance(p1, p2);
+            }
+
             double d_spacing = 1.0 / n_segments;
             double d_radius = d_length * line_length;
             double dx = p1.X - p2.X;
@@ -138,14 +140,17 @@ namespace BoneInspector_Rework
             double p_offset = Math.Atan(dx / dy) * (180.0 / Math.PI);
 
             // Bottom half
-            for (int i = n_angle_segments - 1; i > 0; i--)
+            if (!cutoff)
             {
-                double theta = ((180.0 / n_angle_segments) * i) - p_offset + 180;
-                double x = p_prox.X + d_radius * Math.Cos(theta * (Math.PI / 180.0));
-                double y = p_prox.Y - d_radius * Math.Sin(theta * (Math.PI / 180.0));
+                for (int i = n_angle_segments - 1; i > 0; i--)
+                {
+                    double theta = ((180.0 / n_angle_segments) * i) - p_offset + 180;
+                    double x = p_prox.X + d_radius * Math.Cos(theta * (Math.PI / 180.0));
+                    double y = p_prox.Y - d_radius * Math.Sin(theta * (Math.PI / 180.0));
 
-                PointF p_arc = new PointF((float)x, (float)y);
-                lines.Add(new Line(p_prox, p_arc));
+                    PointF p_arc = new PointF((float)x, (float)y);
+                    lines.Add(new Line(p_prox, p_arc));
+                }
             }
 
             // Left half
@@ -160,7 +165,6 @@ namespace BoneInspector_Rework
                 double p_right_y = p.Y + (Math.Sin(alpha) * d_radius);
                 PointF p_left = new PointF((float)p_left_x, (float)p_left_y);
 
-                // All this calculation...
                 lines.Add(new Line(p, p_left));
             }
 
