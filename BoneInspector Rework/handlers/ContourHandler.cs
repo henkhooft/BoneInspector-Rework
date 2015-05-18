@@ -11,16 +11,19 @@ using System.Windows.Forms;
 
 namespace BoneInspector_Rework
 {
+    /// <summary>
+    /// Singleton class for handeling contours.
+    /// </summary>
     class ContourHandler
     {
-        private static ContourHandler instance;
-
-        private List<BaseContour> contours;
-        private BaseContour currentContour;
+        private static ContourHandler instance;         // Singleton instance
+        private List<BaseContour> contours;             // List of contours currently in use
+        private BaseContour currentContour;             // The contour currently working on
 
         private ContourHandler()
         {
             contours = new List<BaseContour>();
+            currentContour = null;
         }
 
         public static ContourHandler Instance
@@ -35,11 +38,18 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Returns a list of all contours.
+        /// </summary>
+        /// <returns></returns>
         public List<BaseContour> getContours()
         {
             return contours;
         }
 
+        /// <summary>
+        /// Creates a new Contour.
+        /// </summary>
         public void newContour()
         {
             BaseContour c = new BaseContour();
@@ -47,16 +57,27 @@ namespace BoneInspector_Rework
             contours.Add(c);
         }
 
+        /// <summary>
+        /// Returns the current working contour.
+        /// </summary>
+        /// <returns></returns>
         public BaseContour getCurrent()
         {
             return currentContour;
         }
 
+        /// <summary>
+        ///  Set the current working contour to a new one.
+        /// </summary>
+        /// <param name="c">The new working contour.</param>
         public void setCurrent(BaseContour c)
         {
             currentContour = c;
         }
 
+        /// <summary>
+        /// Clears the current working contour.
+        /// </summary>
         public void clearCurrent()
         {
             if (currentContour != null)
@@ -68,12 +89,18 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Removes all known contours and clears the current contour.
+        /// </summary>
         public void clearAll()
         {
             contours.Clear();
             currentContour = null;
         }
 
+        /// <summary>
+        /// Removes the last drawn point in the current contour.
+        /// </summary>
         public void removeLastPoint()
         {
             if (currentContour != null)

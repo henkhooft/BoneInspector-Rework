@@ -10,9 +10,17 @@ using System.Windows.Forms;
 
 namespace BoneInspector_Rework
 {
+    /// <summary>
+    /// Provides static methods for calculations with points.
+    /// </summary>
     class PointCalculator
     {
-        /* Returns the absolute distance between two points */
+        /// <summary>
+        /// Gets the absolute distance between 2 points.
+        /// </summary>
+        /// <param name="p1">Point 1.</param>
+        /// <param name="p2">Point 2.</param>
+        /// <returns></returns>
         private static double getDistance(PointF p1, PointF p2)
         {
             Debug.Assert(p1 != null && p2 != null);
@@ -21,6 +29,13 @@ namespace BoneInspector_Rework
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
+        /// <summary>
+        /// Gets a point that is part on a line.
+        /// </summary>
+        /// <param name="p1">Point 1 of the line.</param>
+        /// <param name="p2">Point 2 of the line.</param>
+        /// <param name="d_ax">Proportion of the total line from where to return the point.</param>
+        /// <returns></returns>
         private static PointF getPartOfLine(PointF p1, PointF p2, double d_ax)
         {
             Debug.Assert(p1 != null && p2 != null && d_ax > 0 && d_ax <= 1);
@@ -33,6 +48,14 @@ namespace BoneInspector_Rework
         }
 
         /* Finds the intersection point for line (p1 p2) and line (p3 p4) */
+        /// <summary>
+        /// Finds the intersection point for 2 lines.
+        /// </summary>
+        /// <param name="p1">Point 1 of line 1.</param>
+        /// <param name="p2">Point 2 of line 1.</param>
+        /// <param name="p3">Point 1 of line 2.</param>
+        /// <param name="p4">Point 2 of line 2.</param>
+        /// <returns></returns>
         public static PointF getIntersection(PointF p1, PointF p2, PointF p3, PointF p4)
         {
             Debug.Assert(p1 != null && p2 != null && p3 != null && p4 != null);
@@ -64,15 +87,20 @@ namespace BoneInspector_Rework
             }
         }
 
-        /* Gets a list of lines composing a cutoff fishline structure */
+        /// <summary>
+        /// Returns a list of lines composing a cutoff fishlines structure.
+        /// </summary>
+        /// <param name="p1">The starting point.</param>
+        /// <param name="p2">The point to where the line is drawn.</param>
+        /// <param name="pixelsPerCentimeter">Pixels per centimeter ratio for calculating distance.</param>
+        /// <returns></returns>
         public static List<Line> getFishLine(PointF p1, PointF p2, double pixelsPerCentimeter)
         {
-            //List<Line> lines = getFishLine(p1, p2);
             double length = Properties.Settings.Default.var_fish_length * pixelsPerCentimeter;
             double d_ax = length / getDistance(p1, p2);
             PointF cutoff = getPartOfLine(p1, p2, d_ax);
 
-            // Second point now composes the determined cutoff point. Bool is so not to cut d_ax again.
+            // Second point now composes the determined cutoff point. D_ax will not be cut again.
             List<Line> lines = getFishLine(p1, cutoff, true, p2);
 
             if (getDistance(p1, p2) < getDistance(p1, cutoff))
@@ -83,6 +111,14 @@ namespace BoneInspector_Rework
             return lines;
         }
 
+        /// <summary>
+        /// Returns a list of lines composing a fishline structure.
+        /// </summary>
+        /// <param name="p1">The starting point.</param>
+        /// <param name="p2">The point to where the line is drawn</param>
+        /// <param name="cutoff">Bool describing if the parameters contain values for a cutoff fishline or normal one.</param>
+        /// <param name="orig_prox">Original proximaal point, only applicable if cutoff is true</param>
+        /// <returns></returns>
         public static List<Line> getFishLine(PointF p1, PointF p2, Boolean cutoff, PointF orig_prox)
         {
             Debug.Assert(p1 != null && p2 != null);
@@ -140,18 +176,16 @@ namespace BoneInspector_Rework
             double p_offset = Math.Atan(dx / dy) * (180.0 / Math.PI);
 
             // Bottom half
-            if (!cutoff)
+            for (int i = n_angle_segments - 1; i > 0; i--)
             {
-                for (int i = n_angle_segments - 1; i > 0; i--)
-                {
-                    double theta = ((180.0 / n_angle_segments) * i) - p_offset + 180;
-                    double x = p_prox.X + d_radius * Math.Cos(theta * (Math.PI / 180.0));
-                    double y = p_prox.Y - d_radius * Math.Sin(theta * (Math.PI / 180.0));
+                double theta = ((180.0 / n_angle_segments) * i) - p_offset + 180;
+                double x = p_prox.X + d_radius * Math.Cos(theta * (Math.PI / 180.0));
+                double y = p_prox.Y - d_radius * Math.Sin(theta * (Math.PI / 180.0));
 
-                    PointF p_arc = new PointF((float)x, (float)y);
-                    lines.Add(new Line(p_prox, p_arc));
-                }
+                PointF p_arc = new PointF((float)x, (float)y);
+                lines.Add(new Line(p_prox, p_arc));
             }
+            
 
             // Left half
             for (int i = n_segments; i > 0; i--)
