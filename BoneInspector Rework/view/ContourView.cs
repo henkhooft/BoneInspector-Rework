@@ -43,7 +43,10 @@ namespace BoneInspector_Rework
             list = contourHandler.getContours();
             foreach (BaseContour c in list)
             {
-                listBox1.Items.Add(c.getName());
+                if (c.getName() != null)
+                {
+                    listBox1.Items.Add(c.getName());
+                }
             }
         }
 

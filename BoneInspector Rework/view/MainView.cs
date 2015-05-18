@@ -115,6 +115,9 @@ namespace BoneInspector_Rework
 
                 pictureName = System.IO.Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
                 imageHandler.loadImage(openFileDialog1.FileName);
+
+                // Reset contourfile's last known filename
+                lastSavedFileName = null;
             }
             else return;
 

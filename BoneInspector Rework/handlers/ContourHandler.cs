@@ -139,6 +139,10 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Writes all contours to an xml file.
+        /// </summary>
+        /// <param name="filename">Filename to be written to.</param>
         public void writeContour(string filename)
         {
             System.IO.StreamWriter file = null;
@@ -164,6 +168,10 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Loads all contours inside a xml file.
+        /// </summary>
+        /// <param name="filename">Filename to read from.</param>
         public void loadContour(string filename)
         {
             System.IO.StreamReader file = null;

@@ -102,31 +102,34 @@ namespace BoneInspector_Rework.handlers
             mypen = new Pen(Color.Red, 1.0F);
             foreach (BaseContour c in contourHandler.getContours())
             {
-                PointF p_last = c.getDrawnPoints()[0];
-                foreach (PointF p in c.getDrawnPoints())
+                if (c.getDrawnPoints().Count > 0)
                 {
-                    g.DrawLine(mypen, getRealP(p_last), getRealP(p));
-                    p_last = p;
-                }
-
-                foreach (PointF matchedPoint in c.getMatchedPoints())
-                {
-                    PointF matchedPointFix = getRealP(matchedPoint);
-                    g.DrawEllipse(mypen, matchedPointFix.X, matchedPointFix.Y, 5, 5);
-                }
-
-                /* Check if contour is done */
-                if (!c.getDone())
-                {
-                    int finished = 0;
-                    foreach (Line line in fishLines)
+                    PointF p_last = c.getDrawnPoints()[0];
+                    foreach (PointF p in c.getDrawnPoints())
                     {
-                        if (line.getMatched())
-                            finished++;
+                        g.DrawLine(mypen, getRealP(p_last), getRealP(p));
+                        p_last = p;
                     }
-                    if (finished >= fishLines.Count - 1 && finished > 0)
+
+                    foreach (PointF matchedPoint in c.getMatchedPoints())
                     {
-                        contourHandler.processContour();
+                        PointF matchedPointFix = getRealP(matchedPoint);
+                        g.DrawEllipse(mypen, matchedPointFix.X, matchedPointFix.Y, 5, 5);
+                    }
+
+                    /* Check if contour is done */
+                    if (!c.getDone())
+                    {
+                        int finished = 0;
+                        foreach (Line line in fishLines)
+                        {
+                            if (line.getMatched())
+                                finished++;
+                        }
+                        if (finished >= fishLines.Count - 1 && finished > 0)
+                        {
+                            contourHandler.processContour();
+                        }
                     }
                 }
             }
