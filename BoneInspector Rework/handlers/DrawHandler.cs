@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace BoneInspector_Rework.handlers
 {
+    /// <summary>
+    /// Singleton class that handles the drawing of lines, points and circles.
+    /// </summary>
     class DrawHandler
     {
 
@@ -44,19 +47,35 @@ namespace BoneInspector_Rework.handlers
         }
 
         /* Returns the real point coordinates with relation to the zoom level in use */
+
+        /// <summary>
+        /// Returns the real point coordinates with relation to the zoom level in use.
+        /// </summary>
+        /// <param name="p">Point 1.</param>
+        /// <returns></returns>
         private PointF getRealP(PointF p)
         {
             double zoomValue = imageHandler.getZoom();
             return new PointF((float)(p.X * zoomValue), (float)(p.Y * zoomValue));
         }
 
-        /* Calculates the real point coordinates back from the zoom level */
+        /// <summary>
+        /// Calculates the real point coordinates back from the current zoom level.
+        /// </summary>
+        /// <param name="p">Point 1.</param>
+        /// <returns></returns>
         public PointF getRealPInvert(PointF p)
         {
             double zoomValue = imageHandler.getZoom();
             return new PointF((float)(p.X / zoomValue), (float)(p.Y / zoomValue));
         }
 
+        /// <summary>
+        /// Sets the fishlines to a normal of custom version.
+        /// </summary>
+        /// <param name="p1">First point.</param>
+        /// <param name="p2">Second point.</param>
+        /// <param name="customFishLines">Draw custom fishlines</param>
         public void setFishLines(PointF p1, PointF p2, bool customFishLines)
         {
             if (customFishLines)
@@ -70,16 +89,27 @@ namespace BoneInspector_Rework.handlers
             }
         }
 
+        /// <summary>
+        /// Removes all fishlines from the list.
+        /// </summary>
         public void clearFishLines()
         {
             fishLines.Clear();
         }
 
+        /// <summary>
+        /// Returns a list of the current fishlines.
+        /// </summary>
+        /// <returns></returns>
         public List<Line> getFishLines()
         {
             return fishLines;
         }
 
+        /// <summary>
+        /// Draws the fishlines and corresponding geometry into a image.
+        /// </summary>
+        /// <param name="g">Graphics object to be drawn upon</param>
         private void drawLines(Graphics g)
         {
             Pen mypen = new Pen(Color.Gray, 1.0F);
@@ -135,6 +165,10 @@ namespace BoneInspector_Rework.handlers
             }
         }
 
+        /// <summary>
+        /// Draws the labels next to each finished contour.
+        /// </summary>
+        /// <param name="g">Graphics object to draw upon</param>
         private void drawStrings(Graphics g)
         {
             foreach (BaseContour c in contourHandler.getContours())

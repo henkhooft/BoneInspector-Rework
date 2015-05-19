@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace BoneInspector_Rework
 {
+    /// <summary>
+    /// Form for changing contour settings.
+    /// </summary>
     public partial class ContourView : Form
     {
         ContourHandler contourHandler;

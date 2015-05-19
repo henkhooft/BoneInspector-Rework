@@ -10,16 +10,18 @@ using System.Threading.Tasks;
 
 namespace BoneInspector_Rework.contour
 {
+    /// <summary>
+    /// Composes a basic structure for holding a contour.
+    /// </summary>
     public class BaseContour
     {
+        public string name;                     // Name of the contour
+        public List<PointF> drawnPoints;        // Points drawn by the user
+        public List<PointF> matchedPoints;      // Points matched to the fishlines and the drawnPoints
+        public bool doneDrawing;                // Indicates if a contour is complete
+        public PointF labelPosition;            // Position for the contour label
 
-        public string name;
-        public List<PointF> drawnPoints;
-        public List<PointF> matchedPoints;
-        public bool doneDrawing;
-        public PointF labelPosition;
-
-        private PointF last_p;
+        private PointF last_p;                  // Last drawn point
 
         public BaseContour()
         {
@@ -28,6 +30,11 @@ namespace BoneInspector_Rework.contour
             doneDrawing = false;
         }
 
+        /// <summary>
+        /// Returns an array of bones available. An empty string will be returned on invalid index.
+        /// </summary>
+        /// <param name="index">Index for the type of bone (hand/feet)</param>
+        /// <returns></returns>
         public static string[] getBoneTypes(int index)
         {
             switch (index)
@@ -51,7 +58,13 @@ namespace BoneInspector_Rework.contour
             return new string[1];
         }
 
-
+        /// <summary>
+        /// Returns a list of points that intersect between the fishlines and a given line.
+        /// </summary>
+        /// <param name="p1">Point 1 of a line.</param>
+        /// <param name="p2">Point 2 of a line.</param>
+        /// <param name="lineMatch">Value to set a matched line to</param>
+        /// <returns></returns>
         public List<PointF> getMatching(PointF p1, PointF p2, bool lineMatch)
         {
             List<PointF> matching = new List<PointF>();
@@ -127,6 +140,9 @@ namespace BoneInspector_Rework.contour
             labelPosition = p;
         }
 
+        /// <summary>
+        /// Removes the last point that was drawn by the user.
+        /// </summary>
         public void removeLastPoint()
         {
             if (drawnPoints.Count > 1)
@@ -140,7 +156,10 @@ namespace BoneInspector_Rework.contour
             }
         }
 
-        /* Get the most right point with half of the contour length */
+        /// <summary>
+        /// Returns the most right point with half of the contour length.
+        /// </summary>
+        /// <returns></returns>
         public PointF getLabelPosition()
         {
             Debug.Assert(matchedPoints[0] != null);

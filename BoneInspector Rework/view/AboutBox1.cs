@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace BoneInspector_Rework
 {
+    /// <summary>
+    /// Aboutbox with general information about the application.
+    /// </summary>
     partial class AboutBox1 : Form
     {
         public AboutBox1()

@@ -13,7 +13,9 @@ using BoneInspector_Rework.handlers;
 
 namespace BoneInspector_Rework
 {
-    /* Singleton class */
+    /// <summary>
+    /// Singleton class and main control interface.
+    /// </summary>
     public partial class MainView : Form
     {
         // Singleton instance
@@ -28,12 +30,12 @@ namespace BoneInspector_Rework
         private string pictureName = null;
 
         // Progress bools
-        private bool draw_fish = false;
-        private bool draw_custom_fish = false;
-        private bool draw_fish_first = false;
-        private PointF draw_fish_first_point;
-        private bool draw_contour = false;
-        private bool draw_contour_first = false;
+        private bool draw_fish = false;                 // Draw a normal fish line
+        private bool draw_custom_fish = false;          // Draw a custom fish line
+        private bool draw_fish_first = false;           // First point is drawn
+        private PointF draw_fish_first_point;           // First fishlines point coordinates
+        private bool draw_contour = false;              // Draw a contour
+        private bool draw_contour_first = false;        // First contour point coordinates
         
 
 
@@ -98,6 +100,7 @@ namespace BoneInspector_Rework
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                // Enable the buttons when a valid image is chosen.
                 saveFileButton.Enabled = true;
                 fishlineButton.Enabled = true;
                 zoomInButton.Enabled = true;
@@ -260,16 +263,21 @@ namespace BoneInspector_Rework
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            //if (draw_fish)
-            //{
-            //    if (draw_fish_first)
-            //    {
-            //        // Getting the cursers location
-            //        this.Cursor = new Cursor(Cursor.Current.Handle);
-            //        PointF curs = pictureBox1.PointToClient(Cursor.Position);
-            //        g.DrawString("BLA", drawFont, drawBrush, curs);
-            //    }
-            //}
+            if (draw_fish)
+            {
+                if (draw_fish_first)
+                {
+                    //// Getting the cursers location
+                    //this.Cursor = new Cursor(Cursor.Current.Handle);
+                    //PointF curs = pictureBox1.PointToClient(Cursor.Position);
+                    //pictureBox1.Invalidate();
+
+                    //Graphics g = this.pictureBox1.CreateGraphics();
+                    
+                    //g.DrawLine(Pens.DarkBlue, draw_fish_first_point, curs);
+                    //g.Dispose();
+                }
+            }
         }
 
         private void openContourListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -290,6 +298,9 @@ namespace BoneInspector_Rework
             setDrawing();
         }
 
+        /// <summary>
+        /// Enables to drawing of contour lines.
+        /// </summary>
         public void setDrawing()
         {
             if (!draw_fish)
@@ -313,6 +324,9 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Removes the contour options panel if opened.
+        /// </summary>
         public void removeContourOptions()
         {
             if (contourPanel != null)
@@ -362,7 +376,10 @@ namespace BoneInspector_Rework
             panel1.Focus();
         }
 
-        /* Get current bone type (Hand/Feet) */
+        /// <summary>
+        /// Returns the currently selected bone type (hand/feet).
+        /// </summary>
+        /// <returns></returns>
         public int getBoneType()
         {
             return boneTypeBox.SelectedIndex;

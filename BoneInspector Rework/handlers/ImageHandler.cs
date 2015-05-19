@@ -10,19 +10,21 @@ using System.Windows.Forms;
 
 namespace BoneInspector_Rework
 {
-    /* Singleton class for handling images */
+    /// <summary>
+    /// Singleton class for handling images.
+    /// </summary>
     class ImageHandler
     {
         private static ImageHandler instance;
 
-        private const double MIN_ZOOM = 0.11;
-        private const double MAX_ZOOM = 2;
+        private const double MIN_ZOOM = 0.11;       // Minimum allowed zoom level
+        private const double MAX_ZOOM = 2;          // Maximum allowed zoom level
 
-        private FIBITMAP dib, dib_orig;
-        private Graphics g;
+        private FIBITMAP dib, dib_orig;             // Original bitmaps used by FreeImage
+        private Graphics g;                         // Graphics object to draw upon
         private Bitmap image;
-        private bool rescaled;
-        private double zoomValue;
+        private bool rescaled;                      // Image was rescaled after last refresh
+        private double zoomValue;                   // Current zoomvalue
         private double pixelsPerCentimeter;
 
 
@@ -48,6 +50,10 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Loads an image and calculates the pixels per centimeter value.
+        /// </summary>
+        /// <param name="filename"></param>
         public void loadImage(string filename)
         {
             dib_orig = FreeImage.LoadEx(@filename);
@@ -65,6 +71,10 @@ namespace BoneInspector_Rework
             return pixelsPerCentimeter;
         }
 
+        /// <summary>
+        /// Rescales the original image to a new zoom level.
+        /// </summary>
+        /// <param name="newZoom">Value to zoom to.</param>
         public void rescale(double newZoom)
         {
             if (newZoom != zoomValue)
@@ -78,6 +88,9 @@ namespace BoneInspector_Rework
             refreshImage();
         }
 
+        /// <summary>
+        /// Refreshes the currrent image.
+        /// </summary>
         public void refreshImage()
         {
             if (rescaled && dib != null)
@@ -110,6 +123,9 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Flips the image horizontally.
+        /// </summary>
         public void flipHorizontally()
         {
             if (!dib_orig.IsNull)
@@ -120,6 +136,9 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Flips the image vertically.
+        /// </summary>
         public void flipVertically()
         {
             if (!dib_orig.IsNull)
@@ -130,6 +149,9 @@ namespace BoneInspector_Rework
             }
         }
 
+        /// <summary>
+        /// Inverts the image.
+        /// </summary>
         public void invert()
         {
             if (!dib_orig.IsNull)
@@ -145,6 +167,10 @@ namespace BoneInspector_Rework
             return zoomValue;
         }
 
+        /// <summary>
+        /// Zoom to a specified Y width while keeping aspect ratio.
+        /// </summary>
+        /// <param name="panelWidth">Width to zoom at.</param>
         public void zoomToWidth(int panelWidth)
         {
             rescale((double)panelWidth / (double)FreeImage.GetWidth(dib_orig));
