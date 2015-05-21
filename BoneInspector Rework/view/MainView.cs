@@ -36,10 +36,6 @@ namespace BoneInspector_Rework
         private PointF draw_fish_first_point;           // First fishlines point coordinates
         private bool draw_contour = false;              // Draw a contour
         private bool draw_contour_first = false;        // First contour point coordinates
-        
-
-
-
 
         private MainView()
         {

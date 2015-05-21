@@ -107,14 +107,17 @@ namespace BoneInspector_Rework
                 {
                     image.Dispose();
                 }
-                image = new Bitmap(FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
+                Bitmap temp = FreeImage.GetBitmap(dib);
+                image = new Bitmap(temp.Width, temp.Height);
 
                 g = Graphics.FromImage(image);
-                g.DrawImage(FreeImage.GetBitmap(dib), 0, 0, FreeImage.GetBitmap(dib).Width, FreeImage.GetBitmap(dib).Height);
+                g.DrawImage(temp, 0, 0, temp.Width, temp.Height);
 
                 // Draw the neccesary overlay
                 DrawHandler.Instance.drawAll(g);
                 MainView.Instance.setPicture(image);
+
+                temp.Dispose();
 
                 if (g != null)
                 {
@@ -132,6 +135,7 @@ namespace BoneInspector_Rework
             {
                 FreeImage.FlipHorizontal(dib_orig);
                 dib = dib_orig;
+                rescaled = true;
                 refreshImage();
             }
         }
@@ -145,6 +149,7 @@ namespace BoneInspector_Rework
             {
                 FreeImage.FlipVertical(dib_orig);
                 dib = dib_orig;
+                rescaled = true;
                 refreshImage();
             }
         }
@@ -158,6 +163,7 @@ namespace BoneInspector_Rework
             {
                 FreeImage.Invert(dib_orig);
                 dib = dib_orig;
+                rescaled = true;
                 refreshImage();
             }
         }

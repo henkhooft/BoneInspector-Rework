@@ -45,7 +45,7 @@ namespace BoneInspector_Rework.contour
                         "PP1", "PP2", "PP3", "PP4", "PP5",
                         "MP1", "MP2", "MP3", "MP4", "MP5",
                         "DP1", "DP2", "DP3", "DP4", "DP5",
-                        "ULNA"
+                        "ULNA", "CARPUS"
                     };
                 case 1: // Feet
                     return new string[] {

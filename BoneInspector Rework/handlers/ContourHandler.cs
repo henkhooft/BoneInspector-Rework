@@ -148,6 +148,20 @@ namespace BoneInspector_Rework
             System.IO.StreamWriter file = null;
             try
             {
+
+                /* Check for contours that are not done before writing */
+                if (contours.Count > 0)
+                {
+                    foreach (BaseContour b in contours)
+                    {
+                        if (!b.getDone())
+                        {
+                            MessageBox.Show("Please finish a contour before you try to save!");
+                            return;
+                        }
+                    }
+                }
+
                 System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<BaseContour>));
                 file = new StreamWriter(@filename);
                 if (contours.Count > 0)
